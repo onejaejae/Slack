@@ -3,9 +3,19 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SlackConfigModule } from './components/config/config.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { UserModule } from './components/user/user.module';
+import { WorkspaceModule } from './components/workspace/workspace.module';
+import { ChannelModule } from './components/channel/channel.module';
+import { AuthModule } from './components/auth/auth.module';
 
 @Module({
-  imports: [SlackConfigModule],
+  imports: [
+    SlackConfigModule,
+    UserModule,
+    WorkspaceModule,
+    ChannelModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
