@@ -2,19 +2,27 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { JoinDto } from './dto/join.dto';
 
-@Controller()
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  getProfile() {}
+  getProfile() {
+    return this.userService.getProfile();
+  }
 
   @Post('login')
-  async login() {}
+  async login() {
+    return this.userService.login();
+  }
 
   @Post()
-  async join(@Body() joinDto: JoinDto) {}
+  async join(@Body() joinDto: JoinDto) {
+    this.userService.join(joinDto);
+  }
 
   @Post('logout')
-  async logout() {}
+  async logout() {
+    this.userService.logout();
+  }
 }

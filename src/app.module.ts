@@ -7,6 +7,7 @@ import { UserModule } from './components/user/user.module';
 import { WorkspaceModule } from './components/workspace/workspace.module';
 import { ChannelModule } from './components/channel/channel.module';
 import { AuthModule } from './components/auth/auth.module';
+import { DmModule } from './components/dm/dm.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from './components/auth/auth.module';
     WorkspaceModule,
     ChannelModule,
     AuthModule,
+    DmModule,
   ],
   controllers: [AppController],
   providers: [AppService],
