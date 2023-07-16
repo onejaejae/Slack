@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { WorkspaceService } from './workspace.service';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { CreateWorkspaceMemberDto } from './dto/create-workspace.member.dto';
+import { User } from 'src/decorators/user.decorator';
 
 @Controller('workplaces')
 export class WorkspaceController {
@@ -9,7 +10,7 @@ export class WorkspaceController {
 
   // '내 워크스페이스 가져오기'
   @Get()
-  async getMyWorkspaces() {}
+  async getMyWorkspaces(@User() user) {}
 
   // '워크스페이스 만들기'
   @Post()
