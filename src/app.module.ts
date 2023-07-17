@@ -8,6 +8,8 @@ import { WorkspaceModule } from './components/workspace/workspace.module';
 import { ChannelModule } from './components/channel/channel.module';
 import { AuthModule } from './components/auth/auth.module';
 import { DmModule } from './components/dm/dm.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ApiResponseInterceptor } from './common/interceptors/apiResponse.interceptor';
 
 @Module({
   imports: [
@@ -19,7 +21,13 @@ import { DmModule } from './components/dm/dm.module';
     DmModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ApiResponseInterceptor,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
