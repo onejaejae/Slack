@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Channel } from 'src/components/channel/schema/channel.schema';
 import { SlackConfigModule } from 'src/components/config/config.module';
 import { SlackConfigService } from 'src/components/config/config.service';
-import { DM } from 'src/components/dm/schema/dm.schema';
-import { ChannelChat } from 'src/components/mapping/schema/channel.chat.schema';
-import { ChannelMember } from 'src/components/mapping/schema/channel.member.schema';
-import { WorkspaceMember } from 'src/components/mapping/schema/workspace.member.schema';
-import { Mention } from 'src/components/mention/schema/mention.schema';
-import { User } from 'src/components/user/schema/user.schema';
-import { Workspace } from 'src/components/workspace/schema/workspace.schema';
+import { Channel } from '../components/channel/schema/channel.schema';
+import { DM } from '../components/dm/schema/dm.schema';
+import { ChannelChat } from '../components/mapping/schema/channel.chat.schema';
+import { ChannelMember } from '../components/mapping/schema/channel.member.schema';
+import { WorkspaceMember } from '../components/mapping/schema/workspace.member.schema';
+import { Mention } from '../components/mention/schema/mention.schema';
+import { User } from '../components/user/schema/user.schema';
+import { Workspace } from '../components/workspace/schema/workspace.schema';
 
 @Module({
   imports: [

@@ -1,7 +1,9 @@
-import { BaseSchema } from 'src/common/database/base.schema';
-import { Channel } from 'src/components/channel/schema/channel.schema';
-import { User } from 'src/components/user/schema/user.schema';
-import { WorkspaceMember } from 'src/components/mapping/schema/workspace.member.schema';
+import { BaseSchema } from '../../../database/base.schema';
+import { Channel } from '../../channel/schema/channel.schema';
+import { User } from '../../user/schema/user.schema';
+import { WorkspaceMember } from '../../mapping/schema/workspace.member.schema';
+import { DM } from '../../dm/schema/dm.schema';
+import { Mention } from '../../mention/schema/mention.schema';
 import {
   Column,
   Entity,
@@ -11,8 +13,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { DM } from 'src/components/dm/schema/dm.schema';
-import { Mention } from 'src/components/mention/schema/mention.schema';
 
 @Entity({ schema: 'slack', name: 'workspaces' })
 export class Workspace extends BaseSchema {

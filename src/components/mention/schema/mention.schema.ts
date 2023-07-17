@@ -1,4 +1,4 @@
-import { BaseSchema } from 'src/common/database/base.schema';
+import { BaseSchema } from '../../../database/base.schema';
 import {
   Column,
   Entity,
@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { mentionType } from '../interface';
-import { Workspace } from 'src/components/workspace/schema/workspace.schema';
-import { User } from 'src/components/user/schema/user.schema';
+import { Workspace } from '../../workspace/schema/workspace.schema';
+import { User } from '../../user/schema/user.schema';
 
 @Entity({ schema: 'sleact', name: 'mentions' })
 export class Mention extends BaseSchema {

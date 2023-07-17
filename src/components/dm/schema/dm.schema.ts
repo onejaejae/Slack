@@ -1,6 +1,6 @@
-import { BaseSchema } from 'src/common/database/base.schema';
-import { User } from 'src/components/user/schema/user.schema';
-import { Workspace } from 'src/components/workspace/schema/workspace.schema';
+import { BaseSchema } from '../../../database/base.schema';
+import { User } from '../../user/schema/user.schema';
+import { Workspace } from '../../workspace/schema/workspace.schema';
 import {
   Column,
   Entity,

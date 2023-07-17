@@ -1,6 +1,6 @@
-import { BaseSchema } from 'src/common/database/base.schema';
-import { Channel } from 'src/components/channel/schema/channel.schema';
-import { User } from 'src/components/user/schema/user.schema';
+import { BaseSchema } from '../../../database/base.schema';
+import { Channel } from '../../channel/schema/channel.schema';
+import { User } from '../../user/schema/user.schema';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity({ schema: 'slack', name: 'channelMembers' })

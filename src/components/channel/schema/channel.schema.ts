@@ -1,8 +1,8 @@
-import { BaseSchema } from 'src/common/database/base.schema';
-import { ChannelChat } from 'src/components/mapping/schema/channel.chat.schema';
-import { ChannelMember } from 'src/components/mapping/schema/channel.member.schema';
-import { User } from 'src/components/user/schema/user.schema';
-import { Workspace } from 'src/components/workspace/schema/workspace.schema';
+import { BaseSchema } from '../../../database/base.schema';
+import { ChannelChat } from '../../mapping/schema/channel.chat.schema';
+import { ChannelMember } from '../../mapping/schema/channel.member.schema';
+import { User } from '../../user/schema/user.schema';
+import { Workspace } from '../../workspace/schema/workspace.schema';
 import {
   Column,
   Entity,

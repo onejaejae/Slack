@@ -1,11 +1,11 @@
-import { BaseSchema } from 'src/common/database/base.schema';
-import { Channel } from 'src/components/channel/schema/channel.schema';
-import { DM } from 'src/components/dm/schema/dm.schema';
-import { ChannelChat } from 'src/components/mapping/schema/channel.chat.schema';
-import { ChannelMember } from 'src/components/mapping/schema/channel.member.schema';
-import { WorkspaceMember } from 'src/components/mapping/schema/workspace.member.schema';
-import { Mention } from 'src/components/mention/schema/mention.schema';
-import { Workspace } from 'src/components/workspace/schema/workspace.schema';
+import { BaseSchema } from '../../../database/base.schema';
+import { Channel } from '../../channel/schema/channel.schema';
+import { DM } from '../../dm/schema/dm.schema';
+import { ChannelChat } from '../../mapping/schema/channel.chat.schema';
+import { ChannelMember } from '../../mapping/schema/channel.member.schema';
+import { WorkspaceMember } from '../../mapping/schema/workspace.member.schema';
+import { Mention } from '../../mention/schema/mention.schema';
+import { Workspace } from '../../workspace/schema/workspace.schema';
 import {
   Column,
   Entity,
