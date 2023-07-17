@@ -10,6 +10,7 @@ import { AuthModule } from './components/auth/auth.module';
 import { DmModule } from './components/dm/dm.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ApiResponseInterceptor } from './common/interceptors/apiResponse.interceptor';
+import { DatabaseModule } from './common/database/database.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ApiResponseInterceptor } from './common/interceptors/apiResponse.interc
     WorkspaceModule,
     ChannelModule,
     AuthModule,
+    DatabaseModule,
     DmModule,
   ],
   controllers: [AppController],

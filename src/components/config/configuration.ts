@@ -8,5 +8,10 @@ export const configurations = (): Configurations => {
       PORT: process.env.PORT || 8081,
       ENV: currentEnv,
     },
+    DB: {
+      USER_NAME: process.env.USER_NAME,
+      PASSWORD: process.env.PASSWORD,
+      DATABASE: process.env.DATABASE,
+    },
   };
 };

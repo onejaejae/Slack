@@ -1,0 +1,29 @@
+import { BaseSchema } from 'src/common/database/base.schema';
+import { User } from 'src/components/user/schema/user.schema';
+import { Workspace } from 'src/components/workspace/schema/workspace.schema';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+
+@Entity({ schema: 'slack', name: 'workspacemembers' })
+export class WorkspaceMember extends BaseSchema {
+  @Column('int', { primary: true })
+  workspaceId: number;
+
+  @Column('int', { primary: true })
+  userId: number;
+
+  @Column('datetime', { name: 'loggedInAt', nullable: true })
+  loggedInAt: Date | null;
+
+  @ManyToOne(() => User, (user) => user.WorkspaceMembers, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
+  User: User;
+
+  @ManyToOne(() => Workspace, (workspace) => workspace.WorkspaceMembers, {
+    cascade: ['insert'],
+  })
+  @JoinColumn([{ name: 'workspaceId', referencedColumnName: 'id' }])
+  Workspace: Workspace;
+}
