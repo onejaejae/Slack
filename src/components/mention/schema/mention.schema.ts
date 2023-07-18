@@ -15,7 +15,7 @@ export class Mention extends BaseSchema {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Column('enum', { name: 'category', enum: ['chat', 'dm', 'system'] })
+  @Column('enum', { name: 'type', enum: ['chat', 'dm', 'system'] })
   type: mentionType;
 
   @Column('int', { name: 'chatId', nullable: true })

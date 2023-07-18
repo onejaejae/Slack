@@ -16,9 +16,9 @@ export class UserController {
     return this.userService.login();
   }
 
-  @Post()
+  @Post('/join')
   async join(@Body() joinDto: JoinDto) {
-    this.userService.join(joinDto);
+    return this.userService.join(joinDto);
   }
 
   @Post('logout')
