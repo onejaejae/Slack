@@ -6,6 +6,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 
 import { SlackConfigService } from './components/config/config.service';
 import { ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -13,6 +14,7 @@ async function bootstrap() {
   const appConfig = configService.getAppConfig();
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(appConfig.PORT);
 
