@@ -5,10 +5,9 @@ import { User } from '../schema/user.schema';
 @Injectable()
 export class UserRepository extends Repository<User> {
   private userRepository: SelectQueryBuilder<User>;
-
   constructor(private dataSource: DataSource) {
     super(User, dataSource.createEntityManager());
-    this.userRepository = dataSource
+    this.userRepository = this.dataSource
       .getRepository(User)
       .createQueryBuilder('user');
   }
@@ -19,6 +18,6 @@ export class UserRepository extends Repository<User> {
       .where('user.email=:email', {
         email,
       })
-      .getOneOrFail();
+      .getOne();
   }
 }

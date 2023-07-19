@@ -22,7 +22,8 @@ export class WorkspaceMember extends BaseSchema {
   User: User;
 
   @ManyToOne(() => Workspace, (workspace) => workspace.WorkspaceMembers, {
-    cascade: ['insert'],
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinColumn([{ name: 'workspaceId', referencedColumnName: 'id' }])
   Workspace: Workspace;
