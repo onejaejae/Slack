@@ -13,5 +13,8 @@ export const configurations = (): Configurations => {
       PASSWORD: process.env.PASSWORD,
       DATABASE: process.env.DATABASE,
     },
+    AUTH_CONFIG: {
+      COOKIE_SECRET: process.env.COOKIE_SECRET,
+    },
   };
 };

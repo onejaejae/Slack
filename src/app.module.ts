@@ -14,11 +14,11 @@ import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
+    AuthModule,
     SlackConfigModule,
     UserModule,
     WorkspaceModule,
     ChannelModule,
-    AuthModule,
     DatabaseModule,
     DmModule,
   ],
