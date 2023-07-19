@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JoinDto } from './dto/join.dto';
 import { UserRepository } from './repository/user.repository';
 import { WorkspaceMemberRepository } from '../workspace/repository/workspace.member.repository';
@@ -6,6 +10,8 @@ import { ChannelMemberRepository } from '../channel/repository/channel.member.re
 import { ChannelMember } from '../mapping/schema/channel.member.schema';
 import { WorkspaceMember } from '../mapping/schema/workspace.member.schema';
 import bcrypt from 'bcrypt';
+import { Transactional } from 'src/common/decorators/transactional.decorator';
+import { User } from './schema/user.schema';
 
 @Injectable()
 export class UserService {
@@ -17,6 +23,7 @@ export class UserService {
 
   getProfile() {}
 
+  @Transactional()
   async join(joinDto: JoinDto) {
     const { password, email, nickname } = joinDto;
 
@@ -24,20 +31,21 @@ export class UserService {
     if (user) throw new UnauthorizedException('이미 존재하는 유저입니다.');
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const createdUser = await this.userRepository.save({
-      email,
-      nickname,
-      password: hashedPassword,
-    });
+    const createUser = new User();
+
+    createUser.email = email;
+    createUser.nickname = nickname;
+    createUser.password = hashedPassword;
+    await this.userRepository.createEntity(createUser);
 
     const workspaceMember = new WorkspaceMember();
-    workspaceMember.userId = createdUser.id;
+    workspaceMember.userId = createUser.id;
     workspaceMember.workspaceId = 1;
 
     await this.workspaceMemberRepository.createEntity(workspaceMember);
 
     const channelMember = new ChannelMember();
-    channelMember.userId = createdUser.id;
+    channelMember.userId = createUser.id;
     channelMember.channelId = 1;
 
     return this.channelMemberRepository.createEntity(channelMember);

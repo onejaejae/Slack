@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SlackConfigModule } from 'src/components/config/config.module';
 import { SlackConfigService } from 'src/components/config/config.service';
@@ -10,6 +10,8 @@ import { WorkspaceMember } from '../components/mapping/schema/workspace.member.s
 import { Mention } from '../components/mention/schema/mention.schema';
 import { User } from '../components/user/schema/user.schema';
 import { Workspace } from '../components/workspace/schema/workspace.schema';
+import { TransactionManager } from './transaction.manager';
+import { TransactionMiddleware } from 'src/common/middlewares/transaction.middleware';
 
 @Module({
   imports: [
@@ -43,5 +45,11 @@ import { Workspace } from '../components/workspace/schema/workspace.schema';
       },
     }),
   ],
+  providers: [TransactionManager],
+  exports: [TransactionManager],
 })
-export class DatabaseModule {}
+export class DatabaseModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TransactionMiddleware).forRoutes('*');
+  }
+}
