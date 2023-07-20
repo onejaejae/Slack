@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  DynamicModule,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SlackConfigModule } from 'src/components/config/config.module';
 import { SlackConfigService } from 'src/components/config/config.service';
@@ -49,6 +54,13 @@ import { TransactionMiddleware } from 'src/common/middlewares/transaction.middle
   exports: [TransactionManager],
 })
 export class DatabaseModule implements NestModule {
+  static forRoot(): DynamicModule {
+    return {
+      module: DatabaseModule,
+      global: true,
+    };
+  }
+
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(TransactionMiddleware).forRoutes('*');
   }

@@ -4,10 +4,9 @@ import { UserController } from './user.controller';
 import { UserRepository } from './repository/user.repository';
 import { WorkspaceModule } from '../workspace/workspace.module';
 import { ChannelModule } from '../channel/channel.module';
-import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
-  imports: [WorkspaceModule, ChannelModule, DatabaseModule],
+  imports: [WorkspaceModule, ChannelModule],
   controllers: [UserController],
   providers: [UserService, UserRepository],
   exports: [UserRepository],

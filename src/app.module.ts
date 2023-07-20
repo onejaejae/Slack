@@ -19,7 +19,7 @@ import { DatabaseModule } from './database/database.module';
     UserModule,
     WorkspaceModule,
     ChannelModule,
-    DatabaseModule,
+    DatabaseModule.forRoot(),
     DmModule,
   ],
   controllers: [AppController],

@@ -5,7 +5,6 @@ import { UserModule } from '../user/user.module';
 import { LocalSerializer } from './local.serialize';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
-import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   imports: [PassportModule.register({ session: true }), UserModule],
