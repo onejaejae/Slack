@@ -11,6 +11,7 @@ import { DmModule } from './components/dm/dm.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ApiResponseInterceptor } from './common/interceptors/apiResponse.interceptor';
 import { DatabaseModule } from './database/database.module';
+import { ErrorInterceptor } from './common/interceptors/error.interceptor';
 
 @Module({
   imports: [
@@ -28,6 +29,10 @@ import { DatabaseModule } from './database/database.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: ApiResponseInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ErrorInterceptor,
     },
   ],
 })

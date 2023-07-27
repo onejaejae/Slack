@@ -5,6 +5,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { EntityNotFoundError, QueryFailedError } from 'typeorm';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

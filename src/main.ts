@@ -6,10 +6,10 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 
 import { SlackConfigService } from './components/config/config.service';
 import { ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import { TypeORMExceptionFilter } from './common/filters/typeorm-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -31,7 +31,9 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useGlobalFilters(new HttpExceptionFilter());
+  // app.useGlobalFilters(new HttpExceptionFilter());
+  // app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalFilters(new TypeORMExceptionFilter());
 
   await app.listen(appConfig.PORT);
 
