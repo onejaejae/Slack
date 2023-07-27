@@ -26,7 +26,6 @@ export function Transactional() {
   ) {
     // save original method
     const originMethod = descriptor.value;
-    console.log('before originMethod', originMethod);
 
     // wrapped origin method with Transaction
     async function transactionWrapped(...args: unknown[]) {
@@ -51,6 +50,5 @@ export function Transactional() {
     }
 
     descriptor.value = transactionWrapped;
-    console.log('after originMethod', descriptor.value);
   };
 }

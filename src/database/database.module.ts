@@ -54,14 +54,14 @@ import { TransactionMiddleware } from 'src/common/middlewares/transaction.middle
   exports: [TransactionManager],
 })
 export class DatabaseModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TransactionMiddleware).forRoutes('*');
+  }
+
   static forRoot(): DynamicModule {
     return {
       module: DatabaseModule,
       global: true,
     };
-  }
-
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(TransactionMiddleware).forRoutes('*');
   }
 }

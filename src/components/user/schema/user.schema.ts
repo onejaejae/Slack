@@ -68,7 +68,7 @@ export class User extends BaseSchema {
   })
   Workspaces: Workspace[];
 
-  @ManyToMany(() => Workspace, (workspace) => workspace.Members)
+  @ManyToMany(() => Channel, (channel) => channel.Members)
   @JoinTable({
     name: 'channelMembers',
     joinColumn: {

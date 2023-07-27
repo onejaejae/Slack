@@ -7,12 +7,15 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { TransactionManager } from './transaction.manager';
+import { ClassConstructor, plainToInstance } from 'class-transformer';
 
 @Injectable()
 export abstract class SlackBaseRepository<T> {
-  constructor(
-    @Inject(TransactionManager) private readonly txManager: TransactionManager,
-  ) {}
+  protected abstract readonly txManager: TransactionManager;
+
+  constructor(private readonly classType: ClassConstructor<T>) {
+    console.log('SlackBaseRepository excecute');
+  }
 
   /**
    * getName
@@ -30,11 +33,12 @@ export abstract class SlackBaseRepository<T> {
     if (!res) {
       throw new BadRequestException(`don't exist ${id}`);
     }
-    return res;
+    return plainToInstance(this.classType, res);
   }
 
   async createEntity(model: T): Promise<T> {
-    return this.getRepository().save(model);
+    const res = await this.getRepository().save(model);
+    return plainToInstance(this.classType, res);
   }
 
   /**

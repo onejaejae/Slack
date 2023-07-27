@@ -2,7 +2,7 @@ import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { createNamespace, getNamespace } from 'cls-hooked';
 import { NextFunction, Request, Response } from 'express';
 import { EntityManager } from 'typeorm';
-import { SLACK_NAMESPACE, SLACK_ENTITY_MANAGER } from './namespace.constant';
+import { SLACK_ENTITY_MANAGER, SLACK_NAMESPACE } from './namespace.constant';
 
 /**
  * TransactionMiddleware
@@ -14,15 +14,16 @@ import { SLACK_NAMESPACE, SLACK_ENTITY_MANAGER } from './namespace.constant';
  */
 @Injectable()
 export class TransactionMiddleware implements NestMiddleware {
-  private readonly logger: Logger = new Logger(TransactionMiddleware.name);
+  private logger = new Logger('TransactionMiddleware');
   constructor(private readonly em: EntityManager) {}
+
   use(_req: Request, _res: Response, next: NextFunction) {
+    this.logger.log('TransactionMiddleware excecute');
+
     const namespace =
       getNamespace(SLACK_NAMESPACE) ?? createNamespace(SLACK_NAMESPACE);
-    this.logger.log(`Hit TransactionMiddleware`);
 
     return namespace.runAndReturn(async () => {
-      this.logger.log(`SLACK_NAMESPACE Run with status: ${!!namespace.active}`);
       Promise.resolve()
         .then(() => this.setEntityManager())
         .then(next);

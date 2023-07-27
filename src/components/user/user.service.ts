@@ -50,6 +50,4 @@ export class UserService {
 
     return this.channelMemberRepository.createEntity(channelMember);
   }
-
-  logout() {}
 }

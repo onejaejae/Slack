@@ -45,6 +45,7 @@ export class ErrorInterceptor implements NestInterceptor {
           const payload = err.getResponse();
           context.switchToHttp().getResponse().status(err.getStatus());
 
+          console.error(returnObj);
           return of({
             ...returnObj,
             ...(typeof payload === 'string' ? { message: payload } : payload),
@@ -62,6 +63,7 @@ export class ErrorInterceptor implements NestInterceptor {
 
         this.propagateException(err, returnObj); // propagate error for exception filters
 
+        console.error(returnObj);
         return of(returnObj);
       }),
     );

@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { SlackConfigModule } from './components/config/config.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { UserModule } from './components/user/user.module';
@@ -12,6 +10,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ApiResponseInterceptor } from './common/interceptors/apiResponse.interceptor';
 import { DatabaseModule } from './database/database.module';
 import { ErrorInterceptor } from './common/interceptors/error.interceptor';
+import { TransactionMiddleware } from './common/middlewares/transaction.middleware';
 
 @Module({
   imports: [
@@ -20,16 +19,11 @@ import { ErrorInterceptor } from './common/interceptors/error.interceptor';
     UserModule,
     WorkspaceModule,
     ChannelModule,
-    DatabaseModule.forRoot(),
     DmModule,
+    DatabaseModule.forRoot(),
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ApiResponseInterceptor,
-    },
     {
       provide: APP_INTERCEPTOR,
       useClass: ErrorInterceptor,

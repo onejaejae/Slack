@@ -1,16 +1,23 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { WorkspaceService } from './workspace.service';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { CreateWorkspaceMemberDto } from './dto/create-workspace.member.dto';
 import { User } from 'src/common/decorators/user.decorator';
+import { UserJoinWithWorkspace } from 'src/types/user/common';
+import { LoggedInGuard } from '../auth/guards/logged-in.guard';
 
-@Controller('workplaces')
+@Controller('workspaces')
 export class WorkspaceController {
   constructor(private readonly workspaceService: WorkspaceService) {}
 
   // '내 워크스페이스 가져오기'
+  @UseGuards(new LoggedInGuard())
   @Get()
-  async getMyWorkspaces(@User() user) {}
+  async getMyWorkspaces(@User() user: UserJoinWithWorkspace) {
+    console.log('getMyWorkspaces excecute');
+
+    return this.workspaceService.getMyWorkspaces(user.id);
+  }
 
   // '워크스페이스 만들기'
   @Post()
