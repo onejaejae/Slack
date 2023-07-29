@@ -17,11 +17,21 @@ export class UserRepository extends SlackBaseRepository<User> {
 
   @TransformPlainToInstance(User)
   async findByEmail(email: string): Promise<User> {
-    return this.getQueryRepository()
+    return this.getQueryBuilder()
       .select(['user.password', 'user.email', 'user.nickname', 'user.id'])
       .where('user.email=:email', {
         email,
       })
       .getOne();
+  }
+
+  @TransformPlainToInstance(User)
+  async getWorkspaceMembers(url: string): Promise<User[]> {
+    return this.getQueryBuilder()
+      .innerJoin('user.WorkspaceMembers', 'members')
+      .innerJoin('members.Workspace', 'workspace', 'workspace.url =:url', {
+        url,
+      })
+      .getMany();
   }
 }

@@ -64,7 +64,7 @@ export abstract class SlackBaseRepository<T> {
     return this.txManager.getEntityManager().getRepository(this.getName());
   }
 
-  protected getQueryRepository(): SelectQueryBuilder<T> {
+  protected getQueryBuilder(): SelectQueryBuilder<T> {
     return this.txManager
       .getEntityManager()
       .getRepository(this.getName())

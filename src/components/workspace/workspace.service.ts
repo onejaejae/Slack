@@ -9,10 +9,12 @@ import { Channel } from '../channel/schema/channel.schema';
 import { WorkspaceMemberRepository } from './repository/workspace.member.repository';
 import { ChannelRepository } from '../channel/repository/channel.repository';
 import { ChannelMemberRepository } from '../channel/repository/channel.member.repository';
+import { UserRepository } from '../user/repository/user.repository';
 
 @Injectable()
 export class WorkspaceService {
   constructor(
+    private readonly userRepository: UserRepository,
     private readonly workspaceRepository: WorkspaceRepository,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
     private readonly channelRepository: ChannelRepository,
@@ -25,12 +27,15 @@ export class WorkspaceService {
   }
 
   @Transactional()
+  async getWorkspaceMembers(url: string) {
+    return this.userRepository.getWorkspaceMembers(url);
+  }
+
+  @Transactional()
   async createWorkspace(
     createWorkspaceDto: CreateWorkspaceDto,
     userId: number,
   ) {
-    console.log('userId', userId);
-
     const { name, url } = createWorkspaceDto;
 
     const newWorkspace = new Workspace(name, url, userId);

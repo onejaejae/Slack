@@ -4,9 +4,10 @@ import { WorkspaceService } from './workspace.service';
 import { WorkspaceMemberRepository } from './repository/workspace.member.repository';
 import { WorkspaceRepository } from './repository/workspace.repository';
 import { ChannelModule } from '../channel/channel.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [ChannelModule],
+  imports: [ChannelModule, UserModule],
   controllers: [WorkspaceController],
   providers: [WorkspaceService, WorkspaceRepository, WorkspaceMemberRepository],
   exports: [WorkspaceMemberRepository],
