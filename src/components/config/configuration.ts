@@ -5,8 +5,10 @@ export const configurations = (): Configurations => {
 
   return {
     APP: {
-      PORT: process.env.PORT || 8081,
+      PORT: process.env.PORT || 8000,
       ENV: currentEnv,
+      NAME: process.env.NAME || 'slack',
+      BASE_URL: process.env.BASE_URL || 'http://localhost',
     },
     DB: {
       USER_NAME: process.env.USER_NAME,

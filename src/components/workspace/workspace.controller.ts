@@ -4,12 +4,15 @@ import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { CreateWorkspaceMemberDto } from './dto/create-workspace.member.dto';
 import { VerifiedUser } from 'src/types/user/common';
 import { Credentials } from 'src/common/decorators/credential.decorator';
+import { AuthGuard } from 'src/common/guards/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('workspaces')
 export class WorkspaceController {
   constructor(private readonly workspaceService: WorkspaceService) {}
 
   // '내 워크스페이스 가져오기'
+
   @Get()
   async getMyWorkspaces(@Credentials() creadentials: VerifiedUser) {
     return this.workspaceService.getMyWorkspaces(creadentials.user.id);

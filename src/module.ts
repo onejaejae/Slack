@@ -7,10 +7,10 @@ import { ChannelModule } from './components/channel/channel.module';
 import { AuthModule } from './components/auth/auth.module';
 import { DmModule } from './components/dm/dm.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { ApiResponseInterceptor } from './common/interceptors/apiResponse.interceptor';
 import { DatabaseModule } from './database/database.module';
 import { ErrorInterceptor } from './common/interceptors/error.interceptor';
-import { TransactionMiddleware } from './common/middlewares/transaction.middleware';
+import { WinstonModule } from 'nest-winston';
+import { WinstonConfigService } from './common/config-services/winston-config.service';
 
 @Module({
   imports: [
@@ -21,6 +21,7 @@ import { TransactionMiddleware } from './common/middlewares/transaction.middlewa
     ChannelModule,
     DmModule,
     DatabaseModule.forRoot(),
+    WinstonModule.forRootAsync({ useClass: WinstonConfigService }),
   ],
   controllers: [],
   providers: [
@@ -30,7 +31,7 @@ import { TransactionMiddleware } from './common/middlewares/transaction.middlewa
     },
   ],
 })
-export class AppModule implements NestModule {
+export class Modules implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }

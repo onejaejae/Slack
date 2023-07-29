@@ -1,6 +1,8 @@
 export interface AppConfig {
   PORT: string | number;
   ENV: string;
+  NAME: string;
+  BASE_URL: string;
 }
 
 export interface DBConfig {

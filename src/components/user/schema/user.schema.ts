@@ -25,10 +25,10 @@ export class User extends BaseSchema {
   @Column('varchar', { unique: true, length: 30 })
   email: string;
 
-  @Column('varchar', { unique: true, length: 30 })
+  @Column('varchar', { length: 30 })
   nickname: string;
 
-  @Column('varchar', { unique: true, length: 100, select: false })
+  @Column('varchar', { length: 100, select: false })
   password: string;
 
   @OneToMany(() => Workspace, (workspace) => workspace.Owner)

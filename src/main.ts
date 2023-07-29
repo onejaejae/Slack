@@ -1,10 +1,10 @@
 declare const module: any;
 
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { Modules } from './module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SlackConfigService } from './components/config/config.service';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { TypeORMExceptionFilter } from './common/filters/typeorm-exception.filter';
@@ -14,7 +14,7 @@ import { Options } from 'express-mysql-session';
 const MySQLStore = require('express-mysql-session')(session);
 
 (async function () {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(Modules);
   const configService = app.get(SlackConfigService);
 
   app.enableCors({
@@ -31,6 +31,7 @@ const MySQLStore = require('express-mysql-session')(session);
     user: 'slack',
     password: '1234',
     database: 'slack',
+    createDatabaseTable: true,
   };
 
   app.use(helmet());
@@ -57,5 +58,6 @@ const MySQLStore = require('express-mysql-session')(session);
   );
 
   await app.listen(appConfig.PORT);
-  console.log(`Listening port on ${appConfig.PORT}`);
+  Logger.log(`🐁 [SLACK-API][${appConfig.ENV}] Started at: ${Date.now()}`);
+  Logger.log(`🚀 Server open at ${appConfig.BASE_URL}:${appConfig.PORT}`);
 })();
