@@ -1,12 +1,12 @@
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
-import { ChannelMember } from './src/components/mapping/schema/channel.member.schema';
+import { ChannelMember } from './src/components/channel/schema/channel.member.schema';
 import { DM } from './src/components/dm/schema/dm.schema';
 import { Mention } from './src/components/mention/schema/mention.schema';
-import { WorkspaceMember } from './src/components/mapping/schema/workspace.member.schema';
+import { WorkspaceMember } from './src/components/workspace/schema/workspace.member.schema';
 import { Workspace } from './src/components/workspace/schema/workspace.schema';
 import { User } from './src/components/user/schema/user.schema';
-import { ChannelChat } from './src/components/mapping/schema/channel.chat.schema';
+import { ChannelChat } from './src/components/channel/schema/channel.chat.schema';
 import { Channel } from './src/components/channel/schema/channel.schema';
 
 dotenv.config({ path: `./dotenv/.env.local` });

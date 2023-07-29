@@ -1,6 +1,6 @@
 import { BaseSchema } from '../../../database/base.schema';
-import { ChannelChat } from '../../mapping/schema/channel.chat.schema';
-import { ChannelMember } from '../../mapping/schema/channel.member.schema';
+import { ChannelChat } from './channel.chat.schema';
+import { ChannelMember } from './channel.member.schema';
 import { User } from '../../user/schema/user.schema';
 import { Workspace } from '../../workspace/schema/workspace.schema';
 import {

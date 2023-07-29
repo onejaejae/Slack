@@ -5,6 +5,7 @@ import {
   CallHandler,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -13,6 +14,8 @@ import { TypeORMException } from '../exceptions/typeorm.exception';
 
 @Injectable()
 export class ErrorInterceptor implements NestInterceptor {
+  private logger = new Logger('HTTP');
+
   constructor() {}
 
   private propagateException(err: any, returnObj: Record<string, any>) {
@@ -20,7 +23,6 @@ export class ErrorInterceptor implements NestInterceptor {
 
     switch (true) {
       case err instanceof TypeORMError:
-        console.log('TypeORMError excecute');
         throw new TypeORMException(callClass, callMethod, err);
 
       default:
@@ -45,7 +47,11 @@ export class ErrorInterceptor implements NestInterceptor {
           const payload = err.getResponse();
           context.switchToHttp().getResponse().status(err.getStatus());
 
-          console.error(returnObj);
+          this.logger.error(
+            `${context.getClass().name}.${context.getHandler().name}`,
+            err,
+          );
+
           return of({
             ...returnObj,
             ...(typeof payload === 'string' ? { message: payload } : payload),
@@ -63,7 +69,10 @@ export class ErrorInterceptor implements NestInterceptor {
 
         this.propagateException(err, returnObj); // propagate error for exception filters
 
-        console.error(returnObj);
+        this.logger.error(
+          `${context.getClass().name}.${context.getHandler().name}`,
+          err,
+        );
         return of(returnObj);
       }),
     );

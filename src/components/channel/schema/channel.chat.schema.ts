@@ -1,5 +1,5 @@
 import { BaseSchema } from '../../../database/base.schema';
-import { Channel } from '../../channel/schema/channel.schema';
+import { Channel } from './channel.schema';
 import { User } from '../../user/schema/user.schema';
 import {
   Column,

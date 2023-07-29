@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { TransactionManager } from './transaction.manager';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 @Injectable()
 export abstract class SlackBaseRepository<T> {
@@ -26,6 +27,15 @@ export abstract class SlackBaseRepository<T> {
    */
   abstract getName(): EntityTarget<T>;
 
+  async findOne(FindOneOptions: FindOneOptions<T>): Promise<T> {
+    const res = this.getRepository().findOne(FindOneOptions);
+
+    if (!res) {
+      throw new BadRequestException(`don't exist ${FindOneOptions}`);
+    }
+    return plainToInstance(this.classType, res);
+  }
+
   async findByIdOrThrow(id: number): Promise<T> {
     const findOption: FindOneOptions = { where: { id } };
     const res = this.getRepository().findOne(findOption);
@@ -39,6 +49,10 @@ export abstract class SlackBaseRepository<T> {
   async createEntity(model: T): Promise<T> {
     const res = await this.getRepository().save(model);
     return plainToInstance(this.classType, res);
+  }
+
+  async upsert(entity: QueryDeepPartialEntity<T>, options: string[]) {
+    return this.getRepository().upsert(entity, options);
   }
 
   /**

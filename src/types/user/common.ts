@@ -11,3 +11,7 @@ export interface User extends BaseSchema {
 export interface UserJoinWithWorkspace extends User {
   Workspaces: Workspace[];
 }
+
+export interface VerifiedUser {
+  user: Omit<User, 'password'>;
+}

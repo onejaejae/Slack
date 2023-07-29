@@ -1,6 +1,6 @@
 import { BaseSchema } from '../../../database/base.schema';
 import { User } from '../../user/schema/user.schema';
-import { Workspace } from '../../workspace/schema/workspace.schema';
+import { Workspace } from './workspace.schema';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity({ schema: 'slack', name: 'workspacemembers' })

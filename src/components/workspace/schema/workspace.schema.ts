@@ -1,7 +1,7 @@
 import { BaseSchema } from '../../../database/base.schema';
 import { Channel } from '../../channel/schema/channel.schema';
 import { User } from '../../user/schema/user.schema';
-import { WorkspaceMember } from '../../mapping/schema/workspace.member.schema';
+import { WorkspaceMember } from './workspace.member.schema';
 import { DM } from '../../dm/schema/dm.schema';
 import { Mention } from '../../mention/schema/mention.schema';
 import {

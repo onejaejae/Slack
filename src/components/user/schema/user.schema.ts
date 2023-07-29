@@ -1,9 +1,10 @@
+import { Exclude } from 'class-transformer';
 import { BaseSchema } from '../../../database/base.schema';
 import { Channel } from '../../channel/schema/channel.schema';
 import { DM } from '../../dm/schema/dm.schema';
-import { ChannelChat } from '../../mapping/schema/channel.chat.schema';
-import { ChannelMember } from '../../mapping/schema/channel.member.schema';
-import { WorkspaceMember } from '../../mapping/schema/workspace.member.schema';
+import { ChannelChat } from '../../channel/schema/channel.chat.schema';
+import { ChannelMember } from '../../channel/schema/channel.member.schema';
+import { WorkspaceMember } from '../../workspace/schema/workspace.member.schema';
 import { Mention } from '../../mention/schema/mention.schema';
 import { Workspace } from '../../workspace/schema/workspace.schema';
 import {
@@ -81,4 +82,11 @@ export class User extends BaseSchema {
     },
   })
   Channels: Channel[];
+}
+
+export class UserWithoutPassword extends User {
+  @Exclude()
+  declare password: string;
+
+  session: string;
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { WorkspaceMember } from 'src/components/mapping/schema/workspace.member.schema';
+import { WorkspaceMember } from 'src/components/workspace/schema/workspace.member.schema';
 import { SlackBaseRepository } from 'src/database/base.repository';
 import { TransactionManager } from 'src/database/transaction.manager';
 import { EntityTarget } from 'typeorm';

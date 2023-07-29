@@ -1,10 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  DataSource,
-  EntityTarget,
-  Repository,
-  SelectQueryBuilder,
-} from 'typeorm';
+import { EntityTarget } from 'typeorm';
 import { User } from '../schema/user.schema';
 import { SlackBaseRepository } from 'src/database/base.repository';
 import { TransactionManager } from 'src/database/transaction.manager';
