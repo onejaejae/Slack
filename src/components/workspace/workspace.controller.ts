@@ -47,5 +47,10 @@ export class WorkspaceController {
   async createWorkspaceMembers(
     @Param('url') url: string,
     @Body() createWorkspaceMemberDto: CreateWorkspaceMemberDto,
-  ) {}
+  ) {
+    return this.workspaceService.createWorkspaceMembers(
+      url,
+      createWorkspaceMemberDto,
+    );
+  }
 }

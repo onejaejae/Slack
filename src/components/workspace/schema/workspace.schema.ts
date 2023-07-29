@@ -13,6 +13,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Type } from 'class-transformer';
 
 @Entity({ schema: 'slack', name: 'workspaces' })
 export class Workspace extends BaseSchema {
@@ -59,4 +60,9 @@ export class Workspace extends BaseSchema {
 
   @ManyToMany(() => User, (user) => user.Workspaces)
   Members: User[];
+}
+
+export class workspaceJoinWithChannel extends Workspace {
+  @Type(() => Channel)
+  Channels: Channel[];
 }

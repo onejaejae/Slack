@@ -3,6 +3,7 @@ import {
   EntityManager,
   EntityTarget,
   FindOneOptions,
+  FindOptionsWhere,
   Repository,
   SelectQueryBuilder,
 } from 'typeorm';
@@ -25,8 +26,9 @@ export abstract class SlackBaseRepository<T> {
    */
   abstract getName(): EntityTarget<T>;
 
-  async findOne(FindOneOptions: FindOneOptions<T>): Promise<T> {
-    const res = this.getRepository().findOne(FindOneOptions);
+  async findOneOrThrow(FindOneOptions: FindOptionsWhere<T>): Promise<T> {
+    const findOption: FindOneOptions = { where: FindOneOptions };
+    const res = this.getRepository().findOne(findOption);
 
     if (!res) {
       throw new BadRequestException(`don't exist ${FindOneOptions}`);

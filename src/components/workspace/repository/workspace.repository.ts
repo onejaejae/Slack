@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { SlackBaseRepository } from 'src/database/base.repository';
 import { EntityTarget } from 'typeorm';
-import { Workspace } from '../schema/workspace.schema';
+import {
+  Workspace,
+  workspaceJoinWithChannel,
+} from '../schema/workspace.schema';
 import { TransactionManager } from 'src/database/transaction.manager';
 import { TransformPlainToInstance } from 'class-transformer';
 
@@ -21,6 +24,16 @@ export class WorkspaceRepository extends SlackBaseRepository<Workspace> {
       where: {
         WorkspaceMembers: [{ userId }],
       },
+    });
+  }
+
+  @TransformPlainToInstance(workspaceJoinWithChannel)
+  async joinChannel(url: string): Promise<workspaceJoinWithChannel> {
+    return this.getRepository().findOne({
+      where: {
+        url,
+      },
+      relations: ['Channels'],
     });
   }
 }
