@@ -36,11 +36,13 @@ export class WorkspaceController {
   }
 
   // '워크스페이스 특정멤버 가져오기'
-  @Get(':url/members/:id')
+  @Get(':url/members/:userId')
   async getWorkspaceMember(
     @Param('url') url: string,
-    @Param('id') id: number,
-  ) {}
+    @Param('userId') userId: number,
+  ) {
+    return this.workspaceService.getWorkspaceMember(url, userId);
+  }
 
   // '워크스페이스 멤버 초대하기'
   @Post(':url/members')

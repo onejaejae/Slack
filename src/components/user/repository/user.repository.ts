@@ -26,6 +26,16 @@ export class UserRepository extends SlackBaseRepository<User> {
   }
 
   @TransformPlainToInstance(User)
+  async getWorkspaceMember(url: string, userId: number): Promise<User> {
+    return this.getQueryBuilder()
+      .where('user.id=:userId', { userId })
+      .innerJoin('user.Workspaces', 'workspace', 'workspace.url =:url', {
+        url,
+      })
+      .getOne();
+  }
+
+  @TransformPlainToInstance(User)
   async getWorkspaceMembers(url: string): Promise<User[]> {
     return this.getQueryBuilder()
       .innerJoin('user.WorkspaceMembers', 'members')

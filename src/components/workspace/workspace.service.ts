@@ -22,12 +22,14 @@ export class WorkspaceService {
     private readonly channelMemberRepository: ChannelMemberRepository,
   ) {}
 
-  @Transactional()
   async getMyWorkspaces(userId: number) {
     return this.workspaceRepository.findMyWorkspaces(userId);
   }
 
-  @Transactional()
+  async getWorkspaceMember(url: string, userId: number) {
+    return this.userRepository.getWorkspaceMember(url, userId);
+  }
+
   async getWorkspaceMembers(url: string) {
     return this.userRepository.getWorkspaceMembers(url);
   }
