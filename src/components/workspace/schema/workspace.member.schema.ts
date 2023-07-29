@@ -14,6 +14,12 @@ export class WorkspaceMember extends BaseSchema {
   @Column('datetime', { name: 'loggedInAt', nullable: true })
   loggedInAt: Date | null;
 
+  constructor(workspaceId: number, userId: number) {
+    super();
+    this.workspaceId = workspaceId;
+    this.userId = userId;
+  }
+
   @ManyToOne(() => User, (user) => user.WorkspaceMembers, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',

@@ -21,6 +21,7 @@ export class AuthGuard implements CanActivate {
       return false;
     }
     const { user } = credentials;
+    console.log('user', user);
 
     if (!user) {
       return false;

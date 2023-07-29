@@ -32,6 +32,12 @@ export class Channel extends BaseSchema {
   @Column({ nullable: true })
   workspaceId: number | null;
 
+  constructor(name: string, workspaceId: number) {
+    super();
+    this.name = name;
+    this.workspaceId = workspaceId;
+  }
+
   @ManyToOne(() => Workspace, (workspace) => workspace.Channels, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',

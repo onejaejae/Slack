@@ -28,6 +28,13 @@ export class Workspace extends BaseSchema {
   @Column('int', { nullable: true })
   ownerId: number | null;
 
+  constructor(name: string, url: string, ownerId: number) {
+    super();
+    this.name = name;
+    this.url = url;
+    this.ownerId = ownerId;
+  }
+
   @ManyToOne(() => User, (user) => user.OwnedWorkspaces, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',

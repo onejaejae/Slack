@@ -38,16 +38,10 @@ export class AuthService {
     createUser.password = hashedPassword;
     await this.userRepository.createEntity(createUser);
 
-    const workspaceMember = new WorkspaceMember();
-    workspaceMember.userId = createUser.id;
-    workspaceMember.workspaceId = 1;
-
+    const workspaceMember = new WorkspaceMember(1, createUser.id);
     await this.workspaceMemberRepository.createEntity(workspaceMember);
 
-    const channelMember = new ChannelMember();
-    channelMember.userId = createUser.id;
-    channelMember.channelId = 1;
-
+    const channelMember = new ChannelMember(1, createUser.id);
     return this.channelMemberRepository.createEntity(channelMember);
   }
 
@@ -55,17 +49,15 @@ export class AuthService {
     const { email, password } = signInDto;
 
     const user = await this.userRepository.findByEmail(email);
+    if (!user)
+      throw new BadRequestException(`email: ${email} don't exist in users`);
+
     const isSamePassword = await isSameAsHash(password, user.password);
     if (!isSamePassword) {
       throw new BadRequestException(`Incorrect password`);
     }
-    // const sessionValue = await createHash(Date.now().toString());
-
-    // const newSession = new Session(user.id, sessionValue);
-    // await this.sessionRepository.upsert(newSession, ['userId']);
 
     const userExcluded = plainToInstance(UserWithoutPassword, user);
-    // userExcluded.session = sessionValue;
     return userExcluded;
   }
 }

@@ -12,7 +12,6 @@ export class WorkspaceController {
   constructor(private readonly workspaceService: WorkspaceService) {}
 
   // '내 워크스페이스 가져오기'
-
   @Get()
   async getMyWorkspaces(@Credentials() creadentials: VerifiedUser) {
     return this.workspaceService.getMyWorkspaces(creadentials.user.id);
@@ -20,7 +19,15 @@ export class WorkspaceController {
 
   // '워크스페이스 만들기'
   @Post()
-  async createWorkspace(@Body() createWorkspaceDto: CreateWorkspaceDto) {}
+  async createWorkspace(
+    @Body() createWorkspaceDto: CreateWorkspaceDto,
+    @Credentials() creadentials: VerifiedUser,
+  ) {
+    return this.workspaceService.createWorkspace(
+      createWorkspaceDto,
+      creadentials.user.id,
+    );
+  }
 
   // '워크스페이스 멤버 가져오기'
   @Get(':url/members')

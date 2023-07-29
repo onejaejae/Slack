@@ -14,9 +14,7 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 export abstract class SlackBaseRepository<T> {
   protected abstract readonly txManager: TransactionManager;
 
-  constructor(private readonly classType: ClassConstructor<T>) {
-    console.log('SlackBaseRepository excecute');
-  }
+  constructor(private readonly classType: ClassConstructor<T>) {}
 
   /**
    * getName

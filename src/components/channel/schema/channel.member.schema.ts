@@ -11,6 +11,12 @@ export class ChannelMember extends BaseSchema {
   @Column('int', { primary: true })
   userId: number;
 
+  constructor(channelId: number, userId: number) {
+    super();
+    this.channelId = channelId;
+    this.userId = userId;
+  }
+
   @ManyToOne(() => Channel, (channel) => channel.ChannelMembers)
   @JoinColumn([{ name: 'channelId', referencedColumnName: 'id' }])
   Channel: Channel;
