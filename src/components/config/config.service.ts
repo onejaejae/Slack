@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AppConfig, AuthConfig, Configurations, DBConfig } from '.';
+import {
+  AppConfig,
+  AuthConfig,
+  Configurations,
+  DBConfig,
+  ServerConfig,
+} from '.';
 
 @Injectable()
 export class SlackConfigService {
@@ -16,5 +22,9 @@ export class SlackConfigService {
 
   getAuthConfig(): AuthConfig {
     return this.configService.getOrThrow('AUTH_CONFIG');
+  }
+
+  getServer(): ServerConfig {
+    return this.configService.getOrThrow('SERVER');
   }
 }

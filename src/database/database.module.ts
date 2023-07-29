@@ -29,10 +29,10 @@ import { TransactionMiddleware } from 'src/common/middlewares/transaction.middle
         return {
           type: 'mysql',
           host: 'localhost',
-          port: 3306,
-          username: dbConfig.USER_NAME,
-          password: dbConfig.PASSWORD,
-          database: dbConfig.DATABASE,
+          port: Number(dbConfig.DB_PORT),
+          username: dbConfig.DB_USER_NAME,
+          password: dbConfig.DB_PASSWORD,
+          database: dbConfig.DB_DATABASE,
           entities: [
             Channel,
             Workspace,

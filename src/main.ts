@@ -1,5 +1,3 @@
-declare const module: any;
-
 import { NestFactory } from '@nestjs/core';
 import { Modules } from './module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -10,8 +8,6 @@ import session from 'express-session';
 import { TypeORMExceptionFilter } from './common/filters/typeorm-exception.filter';
 import { ApiResponseInterceptor } from './common/interceptors/apiResponse.interceptor';
 import helmet from 'helmet';
-import { Options } from 'express-mysql-session';
-const MySQLStore = require('express-mysql-session')(session);
 
 (async function () {
   const app = await NestFactory.create<NestExpressApplication>(Modules);
@@ -23,16 +19,7 @@ const MySQLStore = require('express-mysql-session')(session);
     credentials: true,
   });
   const appConfig = configService.getAppConfig();
-  const authConfig = configService.getAuthConfig();
-
-  const options: Options = {
-    host: 'localhost',
-    port: 3306,
-    user: 'slack',
-    password: '1234',
-    database: 'slack',
-    createDatabaseTable: true,
-  };
+  const ServerConfig = configService.getServer();
 
   app.use(helmet());
   app.setGlobalPrefix('api');
@@ -40,22 +27,7 @@ const MySQLStore = require('express-mysql-session')(session);
   app.useGlobalInterceptors(new ApiResponseInterceptor());
   app.useGlobalFilters(new TypeORMExceptionFilter());
   app.use(cookieParser());
-  app.use(
-    session({
-      resave: false,
-      saveUninitialized: false,
-      proxy: true,
-      rolling: true,
-      secret: authConfig.COOKIE_SECRET,
-      cookie: {
-        httpOnly: true,
-        maxAge: parseInt(process.env.SESSION_EXPIRE || '86400000', 10),
-        secure: 'auto',
-        sameSite: 'none',
-      },
-      store: new MySQLStore(options),
-    }),
-  );
+  app.use(session(ServerConfig.SESSION));
 
   await app.listen(appConfig.PORT);
   Logger.log(`🐁 [SLACK-API][${appConfig.ENV}] Started at: ${Date.now()}`);
