@@ -24,8 +24,6 @@ export class TypeORMExceptionFilter implements ExceptionFilter {
       responseJson.stack = exception.stack;
     }
 
-    console.log('responseJson', responseJson);
-
     return response.status(responseStatus).json(responseJson);
   }
 }
