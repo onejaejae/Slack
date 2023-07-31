@@ -8,7 +8,6 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { GetWorkspaceChannelChatsQueryDto } from './dto/getWorkspaceChannelChats.query.dto';
 import { CreateWorkspaceMembersDto } from './dto/create-workspace-members.dto';
@@ -76,8 +75,15 @@ export class ChannelController {
   @Post(':url/channels')
   async createWorkspaceChannels(
     @Param('url') url,
-    @Body() body: CreateChannelDto,
-  ) {}
+    @Body() createChannelDto: CreateChannelDto,
+    @Credentials() credential: VerifiedUser,
+  ) {
+    return this.channelService.createWorkspaceChannels(
+      url,
+      createChannelDto.name,
+      credential.user.id,
+    );
+  }
 
   // '워크스페이스 채널 멤버 초대하기'
   @Post(':url/channels/:name/members')

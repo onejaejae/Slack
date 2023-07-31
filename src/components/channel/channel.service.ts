@@ -4,12 +4,27 @@ import {
   ChannelRepositoryKey,
   IChannelRepository,
 } from './interface/channel-repository.interface';
+import { CreateChannelDto } from './dto/create-channel.dto';
+import {
+  IWorkspaceRepository,
+  WorkspaceRepositoryKey,
+} from '../workspace/interface/workspace-repository.interface';
+import { Channel } from './schema/channel.schema';
+import { ChannelMember } from './schema/channel.member.schema';
+import {
+  ChannelMemberRepositoryKey,
+  IChannelMemberRepository,
+} from './interface/channel-member-repository.interface';
 
 @Injectable()
 export class ChannelService implements IChannelService {
   constructor(
     @Inject(ChannelRepositoryKey)
     private readonly channelRepository: IChannelRepository,
+    @Inject(ChannelMemberRepositoryKey)
+    private readonly channelMemberRepository: IChannelMemberRepository,
+    @Inject(WorkspaceRepositoryKey)
+    private readonly workspaceRepository: IWorkspaceRepository,
   ) {}
 
   findById(id: number) {
@@ -32,11 +47,18 @@ export class ChannelService implements IChannelService {
   ) {
     throw new Error('Method not implemented.');
   }
-  createWorkspaceChannelMembers(url: string, name: string, email: string) {
-    throw new Error('Method not implemented.');
+
+  async createWorkspaceChannels(url: string, name: string, userId: number) {
+    const workspace = await this.workspaceRepository.findOneOrThrow({ url });
+
+    const newChannel = new Channel(name, workspace.id);
+    await this.channelRepository.createEntity(newChannel);
+
+    const newChannelMember = new ChannelMember(newChannel.id, userId);
+    await this.channelMemberRepository.createEntity(newChannelMember);
   }
 
-  createWorkspaceChannels(url: string, name: string, userId: number) {
+  createWorkspaceChannelMembers(url: string, name: string, email: string) {
     throw new Error('Method not implemented.');
   }
 

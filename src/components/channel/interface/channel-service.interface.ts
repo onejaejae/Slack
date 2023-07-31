@@ -1,3 +1,4 @@
+import { CreateChannelDto } from '../dto/create-channel.dto';
 import { Channel } from '../schema/channel.schema';
 
 export const ChannelServiceKey = 'ChannelServiceKey';
@@ -18,7 +19,11 @@ export interface IChannelService {
     page: number,
   ): any;
 
-  createWorkspaceChannels(url: string, name: string, userId: number): any;
+  createWorkspaceChannels(
+    url: string,
+    name: string,
+    userId: number,
+  ): Promise<void>;
 
   createWorkspaceChannelMembers(url: string, name: string, email: string): any;
 

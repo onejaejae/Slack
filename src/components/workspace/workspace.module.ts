@@ -1,4 +1,4 @@
-import { ClassProvider, Module } from '@nestjs/common';
+import { ClassProvider, Module, forwardRef } from '@nestjs/common';
 import { WorkspaceController } from './workspace.controller';
 import { WorkspaceService } from './workspace.service';
 import { WorkspaceMemberRepository } from './repository/workspace.member.repository';
@@ -24,9 +24,9 @@ const workspaceMemberRepository: ClassProvider = {
   useClass: WorkspaceMemberRepository,
 };
 @Module({
-  imports: [ChannelModule, UserModule],
+  imports: [forwardRef(() => ChannelModule), UserModule],
   controllers: [WorkspaceController],
   providers: [workspaceService, workspaceRepository, workspaceMemberRepository],
-  exports: [workspaceMemberRepository],
+  exports: [workspaceRepository, workspaceMemberRepository],
 })
 export class WorkspaceModule {}
