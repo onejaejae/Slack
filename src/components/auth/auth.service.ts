@@ -22,13 +22,18 @@ import {
   IUserRepository,
   UserRepositoryKey,
 } from '../user/interface/user-repository.interface';
+import {
+  IWorkspaceMemberRepository,
+  WorkspaceMemberRepositoryKey,
+} from '../workspace/interface/workspace-member-repository.interface';
 
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
     @Inject(UserRepositoryKey)
     private readonly userRepository: IUserRepository,
-    private readonly workspaceMemberRepository: WorkspaceMemberRepository,
+    @Inject(WorkspaceMemberRepositoryKey)
+    private readonly workspaceMemberRepository: IWorkspaceMemberRepository,
     @Inject(ChannelMemberRepositoryKey)
     private readonly channelMemberRepository: IChannelMemberRepository,
   ) {}

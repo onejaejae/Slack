@@ -7,9 +7,13 @@ import {
 } from '../schema/workspace.schema';
 import { TransactionManager } from 'src/database/transaction.manager';
 import { TransformPlainToInstance } from 'class-transformer';
+import { IWorkspaceRepository } from '../interface/workspace-repository.interface';
 
 @Injectable()
-export class WorkspaceRepository extends SlackBaseRepository<Workspace> {
+export class WorkspaceRepository
+  extends SlackBaseRepository<Workspace>
+  implements IWorkspaceRepository
+{
   getName(): EntityTarget<Workspace> {
     return Workspace.name;
   }

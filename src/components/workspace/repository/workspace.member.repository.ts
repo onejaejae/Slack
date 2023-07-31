@@ -3,9 +3,13 @@ import { WorkspaceMember } from 'src/components/workspace/schema/workspace.membe
 import { SlackBaseRepository } from 'src/database/base.repository';
 import { TransactionManager } from 'src/database/transaction.manager';
 import { EntityTarget } from 'typeorm';
+import { IWorkspaceMemberRepository } from '../interface/workspace-member-repository.interface';
 
 @Injectable()
-export class WorkspaceMemberRepository extends SlackBaseRepository<WorkspaceMember> {
+export class WorkspaceMemberRepository
+  extends SlackBaseRepository<WorkspaceMember>
+  implements IWorkspaceMemberRepository
+{
   getName(): EntityTarget<WorkspaceMember> {
     return WorkspaceMember.name;
   }
