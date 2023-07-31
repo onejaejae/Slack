@@ -1,14 +1,28 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dto/create-channel.dto';
 import { GetWorkspaceChannelChatsQueryDto } from './dto/getWorkspaceChannelChats.query.dto';
 import { CreateWorkspaceMembersDto } from './dto/create-workspace-members.dto';
 import { CreateWorkspaceChannelChatsDto } from './dto/create-workspace-channel.chats.dto';
 import { GetUnreadChannelsQueryDto } from './dto/getUnreadChannels.query.dto';
+import {
+  ChannelServiceKey,
+  IChannelService,
+} from './interface/channel-service.interface';
 
 @Controller('workspaces')
 export class ChannelController {
-  constructor(private readonly channelService: ChannelService) {}
+  constructor(
+    @Inject(ChannelServiceKey) private readonly channelService: IChannelService,
+  ) {}
 
   // 워크스페이스 채널 모두 가져오기
   @Get(':url/channels')

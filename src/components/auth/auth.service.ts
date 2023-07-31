@@ -14,9 +14,10 @@ import { WorkspaceMember } from '../workspace/schema/workspace.member.schema';
 import { WorkspaceMemberRepository } from '../workspace/repository/workspace.member.repository';
 import { ChannelMember } from '../channel/schema/channel.member.schema';
 import { ChannelMemberRepository } from '../channel/repository/channel.member.repository';
+import { IAuthService } from './interface/auth-service.interface';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements IAuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,

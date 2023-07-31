@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
 import { WorkspaceModule } from '../workspace/workspace.module';
 import { ChannelModule } from '../channel/channel.module';
-import { AuthServiceKey } from './interfaces/auth-service.interface';
+import { AuthServiceKey } from './interface/auth-service.interface';
 
 const authService: ClassProvider = {
   provide: AuthServiceKey,

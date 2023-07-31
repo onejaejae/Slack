@@ -14,7 +14,7 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
 import {
   AuthServiceKey,
   IAuthService,
-} from './interfaces/auth-service.interface';
+} from './interface/auth-service.interface';
 
 @Controller('auth')
 export class AuthController {

@@ -1,6 +1,53 @@
 import { Injectable } from '@nestjs/common';
+import { IChannelService } from './interface/channel-service.interface';
 
 @Injectable()
-export class ChannelService {
+export class ChannelService implements IChannelService {
   constructor() {}
+
+  findById(id: number) {
+    throw new Error('Method not implemented.');
+  }
+  getWorkspaceChannels(url: string, userId: number) {
+    throw new Error('Method not implemented.');
+  }
+  getWorkspaceChannel(url: string, name: string) {
+    throw new Error('Method not implemented.');
+  }
+  createWorkspaceChannels(url: string, name: string, userId: number) {
+    throw new Error('Method not implemented.');
+  }
+  getWorkspaceChannelMembers(url: string, name: string) {
+    throw new Error('Method not implemented.');
+  }
+  createWorkspaceChannelMembers(url: string, name: string, email: string) {
+    throw new Error('Method not implemented.');
+  }
+  getWorkspaceChannelChats(
+    url: string,
+    name: string,
+    perPage: number,
+    page: number,
+  ) {
+    throw new Error('Method not implemented.');
+  }
+  createWorkspaceChannelChats(
+    url: string,
+    name: string,
+    content: string,
+    userId: number,
+  ) {
+    throw new Error('Method not implemented.');
+  }
+  createWorkspaceChannelImages(
+    url: string,
+    name: string,
+    files: Express.Multer.File[],
+    userId: number,
+  ) {
+    throw new Error('Method not implemented.');
+  }
+  getChannelUnreadsCount(url: string, name: string, after: number) {
+    throw new Error('Method not implemented.');
+  }
 }
