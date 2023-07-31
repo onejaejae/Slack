@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -13,15 +14,19 @@ import { JoinDto } from './dto/join.dto';
 import { WorkspaceMember } from '../workspace/schema/workspace.member.schema';
 import { WorkspaceMemberRepository } from '../workspace/repository/workspace.member.repository';
 import { ChannelMember } from '../channel/schema/channel.member.schema';
-import { ChannelMemberRepository } from '../channel/repository/channel.member.repository';
 import { IAuthService } from './interface/auth-service.interface';
+import {
+  ChannelMemberRepositoryKey,
+  IChannelMemberRepository,
+} from '../channel/interface/channel-member-repository.interface';
 
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
-    private readonly channelMemberRepository: ChannelMemberRepository,
+    @Inject(ChannelMemberRepositoryKey)
+    private readonly channelMemberRepository: IChannelMemberRepository,
   ) {}
 
   @Transactional()

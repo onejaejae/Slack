@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { WorkspaceRepository } from './repository/workspace.repository';
 import { Transactional } from 'src/common/decorators/transactional.decorator';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
@@ -12,6 +12,14 @@ import { ChannelMemberRepository } from '../channel/repository/channel.member.re
 import { UserRepository } from '../user/repository/user.repository';
 import { CreateWorkspaceMemberDto } from './dto/create-workspace.member.dto';
 import { IWorkspaceService } from './interface/workspace-service.interface';
+import {
+  ChannelRepositoryKey,
+  IChannelRepository,
+} from '../channel/interface/channel-repository.interface';
+import {
+  ChannelMemberRepositoryKey,
+  IChannelMemberRepository,
+} from '../channel/interface/channel-member-repository.interface';
 
 @Injectable()
 export class WorkspaceService implements IWorkspaceService {
@@ -19,8 +27,10 @@ export class WorkspaceService implements IWorkspaceService {
     private readonly userRepository: UserRepository,
     private readonly workspaceRepository: WorkspaceRepository,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
-    private readonly channelRepository: ChannelRepository,
-    private readonly channelMemberRepository: ChannelMemberRepository,
+    @Inject(ChannelRepositoryKey)
+    private readonly channelRepository: IChannelRepository,
+    @Inject(ChannelMemberRepositoryKey)
+    private readonly channelMemberRepository: IChannelMemberRepository,
   ) {}
 
   async getMyWorkspaces(userId: number) {
