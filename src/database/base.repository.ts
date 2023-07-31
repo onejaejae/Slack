@@ -10,9 +10,10 @@ import {
 import { TransactionManager } from './transaction.manager';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { IBaseRepository } from './interface/base-repository.interface';
 
 @Injectable()
-export abstract class SlackBaseRepository<T> {
+export abstract class SlackBaseRepository<T> implements IBaseRepository<T> {
   protected abstract readonly txManager: TransactionManager;
 
   constructor(private readonly classType: ClassConstructor<T>) {}
