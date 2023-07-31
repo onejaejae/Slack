@@ -11,9 +11,10 @@ import { ChannelRepository } from '../channel/repository/channel.repository';
 import { ChannelMemberRepository } from '../channel/repository/channel.member.repository';
 import { UserRepository } from '../user/repository/user.repository';
 import { CreateWorkspaceMemberDto } from './dto/create-workspace.member.dto';
+import { IWorkspaceService } from './interface/workspace-service.interface';
 
 @Injectable()
-export class WorkspaceService {
+export class WorkspaceService implements IWorkspaceService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly workspaceRepository: WorkspaceRepository,

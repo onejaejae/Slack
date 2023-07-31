@@ -1,15 +1,29 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { WorkspaceService } from './workspace.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { CreateWorkspaceMemberDto } from './dto/create-workspace.member.dto';
 import { VerifiedUser } from 'src/types/user/common';
 import { Credentials } from 'src/common/decorators/credential.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
+import {
+  IWorkspaceService,
+  WorkspaceServiceKey,
+} from './interface/workspace-service.interface';
 
 @UseGuards(AuthGuard)
 @Controller('workspaces')
 export class WorkspaceController {
-  constructor(private readonly workspaceService: WorkspaceService) {}
+  constructor(
+    @Inject(WorkspaceServiceKey)
+    private readonly workspaceService: IWorkspaceService,
+  ) {}
 
   // '내 워크스페이스 가져오기'
   @Get()
