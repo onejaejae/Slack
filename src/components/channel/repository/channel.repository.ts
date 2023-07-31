@@ -17,4 +17,21 @@ export class ChannelRepository
   getName(): EntityTarget<Channel> {
     return Channel.name;
   }
+
+  async getWorkspaceChannels(url: string, userId: number): Promise<Channel[]> {
+    return this.getQueryBuilder()
+      .innerJoinAndSelect(
+        'channel.ChannelMembers',
+        'channerMembers',
+        'channerMembers.userId = :userId',
+        { userId },
+      )
+      .innerJoinAndSelect(
+        'channel.Workspace',
+        'workspace',
+        'workspace.url = :url',
+        { url },
+      )
+      .getMany();
+  }
 }

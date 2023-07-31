@@ -1,9 +1,11 @@
+import { Channel } from '../schema/channel.schema';
+
 export const ChannelServiceKey = 'ChannelServiceKey';
 
 export interface IChannelService {
   findById(id: number): any;
 
-  getWorkspaceChannels(url: string, userId: number): any;
+  getWorkspaceChannels(url: string, userId: number): Promise<Channel[]>;
 
   getWorkspaceChannel(url: string, name: string): any;
 

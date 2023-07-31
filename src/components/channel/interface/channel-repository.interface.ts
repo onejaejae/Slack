@@ -3,4 +3,6 @@ import { Channel } from '../schema/channel.schema';
 
 export const ChannelRepositoryKey = 'ChannelRepositoryKey';
 
-export interface IChannelRepository extends IBaseRepository<Channel> {}
+export interface IChannelRepository extends IBaseRepository<Channel> {
+  getWorkspaceChannels(url: string, userId: number): Promise<Channel[]>;
+}

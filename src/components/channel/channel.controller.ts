@@ -17,6 +17,8 @@ import {
   ChannelServiceKey,
   IChannelService,
 } from './interface/channel-service.interface';
+import { Credentials } from 'src/common/decorators/credential.decorator';
+import { VerifiedUser } from 'src/types/user/common';
 
 @Controller('workspaces')
 export class ChannelController {
@@ -26,7 +28,12 @@ export class ChannelController {
 
   // 워크스페이스 채널 모두 가져오기
   @Get(':url/channels')
-  async getWorkspaceChannels(@Param('url') url: string) {}
+  async getWorkspaceChannels(
+    @Param('url') url: string,
+    @Credentials() credential: VerifiedUser,
+  ) {
+    return this.channelService.getWorkspaceChannels(url, credential.user.id);
+  }
 
   // 워크스페이스 특정 채널 가져오기
   @Get(':url/channels/:name')

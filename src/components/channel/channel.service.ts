@@ -1,15 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { IChannelService } from './interface/channel-service.interface';
+import {
+  ChannelRepositoryKey,
+  IChannelRepository,
+} from './interface/channel-repository.interface';
 
 @Injectable()
 export class ChannelService implements IChannelService {
-  constructor() {}
+  constructor(
+    @Inject(ChannelRepositoryKey)
+    private readonly channelRepository: IChannelRepository,
+  ) {}
 
   findById(id: number) {
     throw new Error('Method not implemented.');
   }
   getWorkspaceChannels(url: string, userId: number) {
-    throw new Error('Method not implemented.');
+    console.log('userId', userId);
+
+    return this.channelRepository.getWorkspaceChannels(url, userId);
   }
   getWorkspaceChannel(url: string, name: string) {
     throw new Error('Method not implemented.');
