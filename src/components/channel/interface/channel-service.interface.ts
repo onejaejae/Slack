@@ -7,7 +7,7 @@ export interface IChannelService {
 
   getWorkspaceChannels(url: string, userId: number): Promise<Channel[]>;
 
-  getWorkspaceChannel(url: string, name: string): any;
+  getWorkspaceChannel(url: string, name: string): Promise<Channel>;
 
   createWorkspaceChannels(url: string, name: string, userId: number): any;
 

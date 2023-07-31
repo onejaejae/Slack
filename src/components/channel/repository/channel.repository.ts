@@ -34,4 +34,13 @@ export class ChannelRepository
       )
       .getMany();
   }
+
+  async getWorkspaceChannel(url: string, name: string): Promise<Channel> {
+    return this.getQueryBuilder()
+      .innerJoin('channel.Workspace', 'workspace', 'workspace.url = :url', {
+        url,
+      })
+      .where('channel.name = :name', { name })
+      .getOne();
+  }
 }
