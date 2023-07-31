@@ -2,19 +2,20 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
   Param,
   ParseIntPipe,
   Post,
   Query,
 } from '@nestjs/common';
-import { DmService } from './dm.service';
 import { WorkspaceDmChatsQueryDto } from './dto/workspace-dm-chats.query.dto';
 import { DmUnreadQueryDto } from './dto/dm-unread.query.dto';
 import { CreateWorkspaceDmChatDto } from './dto/create-workspace-dm-chat.dto';
+import { DMServiceKey, IDMService } from './interface/dm-service.interface';
 
 @Controller('workspaces')
 export class DmController {
-  constructor(private readonly dmService: DmService) {}
+  constructor(@Inject(DMServiceKey) private readonly dmService: IDMService) {}
 
   // '워크스페이스 DM 모두 가져오기'
   @Get(':url/dms')
