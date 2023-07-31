@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { SlackBaseRepository } from 'src/database/base.repository';
 import { TransactionManager } from 'src/database/transaction.manager';
 import { EntityTarget } from 'typeorm';
-import { Channel } from '../schema/channel.schema';
-import { IChannelRepository } from '../interface/channel-repository.interface';
+import { DM } from '../schema/dm.schema';
+import { IDMRepository } from '../interface/dm-repository.interface';
 
 @Injectable()
-export class ChannelRepository
-  extends SlackBaseRepository<Channel>
-  implements IChannelRepository
+export class DMRepository
+  extends SlackBaseRepository<DM>
+  implements IDMRepository
 {
   constructor(protected readonly txManager: TransactionManager) {
-    super(Channel);
+    super(DM);
   }
 
-  getName(): EntityTarget<Channel> {
-    return Channel.name;
+  getName(): EntityTarget<DM> {
+    return DM.name;
   }
 }
