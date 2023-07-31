@@ -6,4 +6,5 @@ export const ChannelRepositoryKey = 'ChannelRepositoryKey';
 export interface IChannelRepository extends IBaseRepository<Channel> {
   getWorkspaceChannels(url: string, userId: number): Promise<Channel[]>;
   getWorkspaceChannel(url: string, name: string): Promise<Channel>;
+  getWorkspaceChannelMembers(url: string, name: string): Promise<Channel>;
 }

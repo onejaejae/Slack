@@ -22,7 +22,7 @@ export class ChannelService implements IChannelService {
     return this.channelRepository.getWorkspaceChannel(url, name);
   }
   getWorkspaceChannelMembers(url: string, name: string) {
-    throw new Error('Method not implemented.');
+    return this.channelRepository.getWorkspaceChannelMembers(url, name);
   }
   getWorkspaceChannelChats(
     url: string,

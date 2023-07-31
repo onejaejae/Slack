@@ -9,11 +9,7 @@ export interface IChannelService {
 
   getWorkspaceChannel(url: string, name: string): Promise<Channel>;
 
-  createWorkspaceChannels(url: string, name: string, userId: number): any;
-
-  getWorkspaceChannelMembers(url: string, name: string): any;
-
-  createWorkspaceChannelMembers(url: string, name: string, email: string): any;
+  getWorkspaceChannelMembers(url: string, name: string): Promise<Channel>;
 
   getWorkspaceChannelChats(
     url: string,
@@ -21,6 +17,10 @@ export interface IChannelService {
     perPage: number,
     page: number,
   ): any;
+
+  createWorkspaceChannels(url: string, name: string, userId: number): any;
+
+  createWorkspaceChannelMembers(url: string, name: string, email: string): any;
 
   createWorkspaceChannelChats(
     url: string,
