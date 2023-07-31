@@ -4,7 +4,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRepository } from '../user/repository/user.repository';
 import { SignInDto } from './dto/signIn.dto';
 import { createHash, isSameAsHash } from 'src/common/utils/encrypt';
 import { plainToInstance } from 'class-transformer';
@@ -19,11 +18,16 @@ import {
   ChannelMemberRepositoryKey,
   IChannelMemberRepository,
 } from '../channel/interface/channel-member-repository.interface';
+import {
+  IUserRepository,
+  UserRepositoryKey,
+} from '../user/interface/user-repository.interface';
 
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
-    private readonly userRepository: UserRepository,
+    @Inject(UserRepositoryKey)
+    private readonly userRepository: IUserRepository,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
     @Inject(ChannelMemberRepositoryKey)
     private readonly channelMemberRepository: IChannelMemberRepository,

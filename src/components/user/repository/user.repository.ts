@@ -4,9 +4,13 @@ import { User } from '../schema/user.schema';
 import { SlackBaseRepository } from 'src/database/base.repository';
 import { TransactionManager } from 'src/database/transaction.manager';
 import { TransformPlainToInstance } from 'class-transformer';
+import { IUserRepository } from '../interface/user-repository.interface';
 
 @Injectable()
-export class UserRepository extends SlackBaseRepository<User> {
+export class UserRepository
+  extends SlackBaseRepository<User>
+  implements IUserRepository
+{
   getName(): EntityTarget<User> {
     return User.name;
   }

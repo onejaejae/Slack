@@ -7,9 +7,6 @@ import { WorkspaceMember } from './schema/workspace.member.schema';
 import { ChannelMember } from '../channel/schema/channel.member.schema';
 import { Channel } from '../channel/schema/channel.schema';
 import { WorkspaceMemberRepository } from './repository/workspace.member.repository';
-import { ChannelRepository } from '../channel/repository/channel.repository';
-import { ChannelMemberRepository } from '../channel/repository/channel.member.repository';
-import { UserRepository } from '../user/repository/user.repository';
 import { CreateWorkspaceMemberDto } from './dto/create-workspace.member.dto';
 import { IWorkspaceService } from './interface/workspace-service.interface';
 import {
@@ -20,11 +17,16 @@ import {
   ChannelMemberRepositoryKey,
   IChannelMemberRepository,
 } from '../channel/interface/channel-member-repository.interface';
+import {
+  IUserRepository,
+  UserRepositoryKey,
+} from '../user/interface/user-repository.interface';
 
 @Injectable()
 export class WorkspaceService implements IWorkspaceService {
   constructor(
-    private readonly userRepository: UserRepository,
+    @Inject(UserRepositoryKey)
+    private readonly userRepository: IUserRepository,
     private readonly workspaceRepository: WorkspaceRepository,
     private readonly workspaceMemberRepository: WorkspaceMemberRepository,
     @Inject(ChannelRepositoryKey)
