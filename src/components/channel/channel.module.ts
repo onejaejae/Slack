@@ -8,6 +8,8 @@ import { ChannelRepositoryKey } from './interface/channel-repository.interface';
 import { ChannelMemberRepositoryKey } from './interface/channel-member-repository.interface';
 import { WorkspaceModule } from '../workspace/workspace.module';
 import { UserModule } from '../user/user.module';
+import { ChannelChatRepositoryKey } from './interface/channel-chat-repository.interface';
+import { ChannelChatRepository } from './repository/channel.chat.repository';
 
 const channelService: ClassProvider = {
   provide: ChannelServiceKey,
@@ -24,10 +26,20 @@ export const channelMemberRepository: ClassProvider = {
   useClass: ChannelMemberRepository,
 };
 
+export const channelChatRepository: ClassProvider = {
+  provide: ChannelChatRepositoryKey,
+  useClass: ChannelChatRepository,
+};
+
 @Module({
   imports: [forwardRef(() => WorkspaceModule), UserModule],
   controllers: [ChannelController],
-  providers: [channelService, channelRepository, channelMemberRepository],
+  providers: [
+    channelService,
+    channelRepository,
+    channelMemberRepository,
+    channelChatRepository,
+  ],
   exports: [channelRepository, channelMemberRepository],
 })
 export class ChannelModule {}

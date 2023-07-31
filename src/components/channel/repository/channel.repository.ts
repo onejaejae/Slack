@@ -43,17 +43,4 @@ export class ChannelRepository
       .where('channel.name = :name', { name })
       .getOne();
   }
-
-  async getWorkspaceChannelMembers(
-    url: string,
-    name: string,
-  ): Promise<Channel> {
-    return this.getQueryBuilder()
-      .innerJoinAndSelect('channel.ChannelMembers', 'channelMembers')
-      .innerJoin('channel.Workspace', 'workspace', 'workspace.url = :url', {
-        url,
-      })
-      .where('channel.name = :name', { name })
-      .getOne();
-  }
 }

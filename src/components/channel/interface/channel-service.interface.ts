@@ -1,3 +1,4 @@
+import { User } from 'src/components/user/schema/user.schema';
 import { CreateChannelDto } from '../dto/create-channel.dto';
 import { Channel } from '../schema/channel.schema';
 
@@ -10,7 +11,7 @@ export interface IChannelService {
 
   getWorkspaceChannel(url: string, name: string): Promise<Channel>;
 
-  getWorkspaceChannelMembers(url: string, name: string): Promise<Channel>;
+  getWorkspaceChannelMembers(url: string, name: string): Promise<User[]>;
 
   getWorkspaceChannelChats(
     url: string,

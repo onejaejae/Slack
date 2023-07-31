@@ -56,4 +56,13 @@ export class UserRepository
       .where('user.email=:email', { email })
       .getOne() as any;
   }
+
+  async getWorkspaceChannelMembers(url: string, name: string): Promise<User[]> {
+    return this.getQueryBuilder()
+      .innerJoin('user.Channels', 'channels', 'channels.name = :name', { name })
+      .innerJoin('user.Workspaces', 'workspaces', 'workspaces.url = :url', {
+        url,
+      })
+      .getMany();
+  }
 }

@@ -14,8 +14,7 @@ import helmet from 'helmet';
   const configService = app.get(SlackConfigService);
 
   app.enableCors({
-    origin: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    origin: ['http://localhost:3090'],
     credentials: true,
   });
   const appConfig = configService.getAppConfig();

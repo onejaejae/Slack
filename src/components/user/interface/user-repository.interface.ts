@@ -8,4 +8,5 @@ export interface IUserRepository extends IBaseRepository<User> {
   getWorkspaceMember(url: string, userId: number): Promise<User>;
   getWorkspaceMembers(url: string): Promise<User[]>;
   joinWithWorkspace(email: string): Promise<UserJoinWithWorkspace>;
+  getWorkspaceChannelMembers(url: string, name: string): Promise<User[]>;
 }

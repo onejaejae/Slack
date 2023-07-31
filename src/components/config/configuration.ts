@@ -33,7 +33,6 @@ export const configurations = (): Configurations => {
           httpOnly: true,
           maxAge: parseInt(process.env.SESSION_EXPIRE || '86400000', 10),
           secure: 'auto',
-          sameSite: 'none',
         },
         store: new MySQLStore({
           host: 'localhost',

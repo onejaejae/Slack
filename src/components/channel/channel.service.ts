@@ -18,6 +18,10 @@ import {
   IUserRepository,
   UserRepositoryKey,
 } from '../user/interface/user-repository.interface';
+import {
+  ChannelChatRepositoryKey,
+  IChannelChatRepository,
+} from './interface/channel-chat-repository.interface';
 
 @Injectable()
 export class ChannelService implements IChannelService {
@@ -26,6 +30,8 @@ export class ChannelService implements IChannelService {
     private readonly channelRepository: IChannelRepository,
     @Inject(ChannelMemberRepositoryKey)
     private readonly channelMemberRepository: IChannelMemberRepository,
+    @Inject(ChannelChatRepositoryKey)
+    private readonly channelChatRepository: IChannelChatRepository,
     @Inject(WorkspaceRepositoryKey)
     private readonly workspaceRepository: IWorkspaceRepository,
     @Inject(UserRepositoryKey)
@@ -42,7 +48,7 @@ export class ChannelService implements IChannelService {
     return this.channelRepository.getWorkspaceChannel(url, name);
   }
   getWorkspaceChannelMembers(url: string, name: string) {
-    return this.channelRepository.getWorkspaceChannelMembers(url, name);
+    return this.userRepository.getWorkspaceChannelMembers(url, name);
   }
   getWorkspaceChannelChats(
     url: string,
@@ -50,7 +56,12 @@ export class ChannelService implements IChannelService {
     perPage: number,
     page: number,
   ) {
-    throw new Error('Method not implemented.');
+    return this.channelChatRepository.getWorkspaceChannelChats(
+      url,
+      name,
+      perPage,
+      page,
+    );
   }
 
   async createWorkspaceChannels(url: string, name: string, userId: number) {
@@ -77,7 +88,7 @@ export class ChannelService implements IChannelService {
     const user = await this.userRepository.joinWithWorkspace(email);
     if (!user.isWorkspaceMember(url))
       throw new BadRequestException(
-        `user email:${email} don't participate workspace url: ${name}`,
+        `user email:${email} don't participate workspace url: ${url}`,
       );
 
     const newChannelMember = new ChannelMember(channel.id, user.id);

@@ -61,7 +61,14 @@ export class ChannelController {
     @Param('url') url,
     @Param('name') name,
     @Query() getWorkspaceChannelChatsQueryDto: GetWorkspaceChannelChatsQueryDto,
-  ) {}
+  ) {
+    return this.channelService.getWorkspaceChannelChats(
+      url,
+      name,
+      getWorkspaceChannelChatsQueryDto.perPage,
+      getWorkspaceChannelChatsQueryDto.page,
+    );
+  }
 
   // '안 읽은 개수 가져오기'
   @Get(':url/channels/:name/unreads')
