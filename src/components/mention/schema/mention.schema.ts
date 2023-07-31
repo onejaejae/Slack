@@ -6,17 +6,18 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { mentionType } from '../interface';
+
 import { Workspace } from '../../workspace/schema/workspace.schema';
 import { User } from '../../user/schema/user.schema';
+import { IMention, MentionType } from 'src/types/mention/common';
 
 @Entity({ schema: 'sleact', name: 'mentions' })
-export class Mention extends BaseSchema {
+export class Mention extends BaseSchema implements IMention {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
-  @Column('enum', { name: 'type', enum: ['chat', 'dm', 'system'] })
-  type: mentionType;
+  @Column('enum', { name: 'type', enum: MentionType })
+  type: MentionType;
 
   @Column('int', { name: 'chatId', nullable: true })
   chatId: number | null;

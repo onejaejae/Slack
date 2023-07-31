@@ -1,3 +1,4 @@
+import { IDM } from 'src/types/dm/common';
 import { BaseSchema } from '../../../database/base.schema';
 import { User } from '../../user/schema/user.schema';
 import { Workspace } from '../../workspace/schema/workspace.schema';
@@ -10,7 +11,7 @@ import {
 } from 'typeorm';
 
 @Entity({ schema: 'slack', name: 'dms' })
-export class DM extends BaseSchema {
+export class DM extends BaseSchema implements IDM {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 

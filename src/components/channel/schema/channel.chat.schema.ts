@@ -8,9 +8,10 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { IChannelChat } from 'src/types/channel/channel-chat/common';
 
 @Entity({ schema: 'slack', name: 'channelChats' })
-export class ChannelChat extends BaseSchema {
+export class ChannelChat extends BaseSchema implements IChannelChat {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 

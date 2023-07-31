@@ -14,9 +14,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Type } from 'class-transformer';
+import { IWorkspace } from 'src/types/workspace/common';
 
 @Entity({ schema: 'slack', name: 'workspaces' })
-export class Workspace extends BaseSchema {
+export class Workspace extends BaseSchema implements IWorkspace {
   @PrimaryGeneratedColumn()
   id: number;
 

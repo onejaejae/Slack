@@ -12,13 +12,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { IUser } from 'src/types/user/common';
 
 @Entity({ schema: 'slack', name: 'users' })
-export class User extends BaseSchema {
+export class User extends BaseSchema implements IUser {
   @PrimaryGeneratedColumn()
   id: number;
 

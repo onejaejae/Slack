@@ -1,17 +1,17 @@
 import { BaseSchema } from 'src/database/base.schema';
-import { Workspace } from '../workspace/common';
+import { IWorkspace } from '../workspace/common';
 
-export interface User extends BaseSchema {
+export interface IUser extends BaseSchema {
   id: number;
   email: string;
   nickname: string;
   password: string;
 }
 
-export interface UserJoinWithWorkspace extends User {
-  Workspaces: Workspace[];
+export interface UserJoinWithWorkspace extends IUser {
+  Workspaces: IWorkspace[];
 }
 
 export interface VerifiedUser {
-  user: Omit<User, 'password'>;
+  user: Omit<IUser, 'password'>;
 }

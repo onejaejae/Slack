@@ -12,9 +12,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { IChannel } from 'src/types/channel/common';
 
 @Entity({ schema: 'slack', name: 'channels' })
-export class Channel extends BaseSchema {
+export class Channel extends BaseSchema implements IChannel {
   @PrimaryGeneratedColumn()
   id: number;
 
