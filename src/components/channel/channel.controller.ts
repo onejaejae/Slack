@@ -91,7 +91,13 @@ export class ChannelController {
     @Param('url') url: string,
     @Param('name') name: string,
     @Body() createWorkspaceMembersDto: CreateWorkspaceMembersDto,
-  ) {}
+  ) {
+    return this.channelService.createWorkspaceChannelMembers(
+      url,
+      name,
+      createWorkspaceMembersDto.email,
+    );
+  }
 
   // '워크스페이스 특정 채널 채팅 생성하기'
   @Post(':url/channels/:name/chats')

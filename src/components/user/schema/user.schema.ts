@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
 import { BaseSchema } from '../../../database/base.schema';
 import { Channel } from '../../channel/schema/channel.schema';
 import { DM } from '../../dm/schema/dm.schema';
@@ -87,6 +87,13 @@ export class User extends BaseSchema implements IUser {
 export class UserWithoutPassword extends User {
   @Exclude()
   declare password: string;
+}
 
-  session: string;
+export class UserJoinWithWorkspace extends User {
+  @Type(() => Workspace)
+  Workspaces: Workspace[];
+
+  isWorkspaceMember(url: string) {
+    return this.Workspaces.find((workspace) => workspace.url === url);
+  }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EntityTarget } from 'typeorm';
-import { User } from '../schema/user.schema';
+import { User, UserJoinWithWorkspace } from '../schema/user.schema';
 import { SlackBaseRepository } from 'src/database/base.repository';
 import { TransactionManager } from 'src/database/transaction.manager';
 import { TransformPlainToInstance } from 'class-transformer';
@@ -47,5 +47,13 @@ export class UserRepository
         url,
       })
       .getMany();
+  }
+
+  @TransformPlainToInstance(UserJoinWithWorkspace)
+  async joinWithWorkspace(email: string): Promise<UserJoinWithWorkspace> {
+    return this.getQueryBuilder()
+      .innerJoinAndSelect('user.Workspaces', 'workspace')
+      .where('user.email=:email', { email })
+      .getOne() as any;
   }
 }

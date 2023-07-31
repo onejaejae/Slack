@@ -7,6 +7,7 @@ import { ChannelServiceKey } from './interface/channel-service.interface';
 import { ChannelRepositoryKey } from './interface/channel-repository.interface';
 import { ChannelMemberRepositoryKey } from './interface/channel-member-repository.interface';
 import { WorkspaceModule } from '../workspace/workspace.module';
+import { UserModule } from '../user/user.module';
 
 const channelService: ClassProvider = {
   provide: ChannelServiceKey,
@@ -24,7 +25,7 @@ export const channelMemberRepository: ClassProvider = {
 };
 
 @Module({
-  imports: [forwardRef(() => WorkspaceModule)],
+  imports: [forwardRef(() => WorkspaceModule), UserModule],
   controllers: [ChannelController],
   providers: [channelService, channelRepository, channelMemberRepository],
   exports: [channelRepository, channelMemberRepository],

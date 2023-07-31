@@ -25,7 +25,11 @@ export interface IChannelService {
     userId: number,
   ): Promise<void>;
 
-  createWorkspaceChannelMembers(url: string, name: string, email: string): any;
+  createWorkspaceChannelMembers(
+    url: string,
+    name: string,
+    email: string,
+  ): Promise<void>;
 
   createWorkspaceChannelChats(
     url: string,

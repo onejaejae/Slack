@@ -1,10 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { IChannelService } from './interface/channel-service.interface';
 import {
   ChannelRepositoryKey,
   IChannelRepository,
 } from './interface/channel-repository.interface';
-import { CreateChannelDto } from './dto/create-channel.dto';
 import {
   IWorkspaceRepository,
   WorkspaceRepositoryKey,
@@ -15,6 +14,10 @@ import {
   ChannelMemberRepositoryKey,
   IChannelMemberRepository,
 } from './interface/channel-member-repository.interface';
+import {
+  IUserRepository,
+  UserRepositoryKey,
+} from '../user/interface/user-repository.interface';
 
 @Injectable()
 export class ChannelService implements IChannelService {
@@ -25,6 +28,8 @@ export class ChannelService implements IChannelService {
     private readonly channelMemberRepository: IChannelMemberRepository,
     @Inject(WorkspaceRepositoryKey)
     private readonly workspaceRepository: IWorkspaceRepository,
+    @Inject(UserRepositoryKey)
+    private readonly userRepository: IUserRepository,
   ) {}
 
   findById(id: number) {
@@ -58,8 +63,25 @@ export class ChannelService implements IChannelService {
     await this.channelMemberRepository.createEntity(newChannelMember);
   }
 
-  createWorkspaceChannelMembers(url: string, name: string, email: string) {
-    throw new Error('Method not implemented.');
+  async createWorkspaceChannelMembers(
+    url: string,
+    name: string,
+    email: string,
+  ) {
+    const channel = await this.channelRepository.getWorkspaceChannel(url, name);
+    if (!channel)
+      throw new BadRequestException(
+        `channel name:${name} don't exist in workspace url:${url} `,
+      );
+
+    const user = await this.userRepository.joinWithWorkspace(email);
+    if (!user.isWorkspaceMember(url))
+      throw new BadRequestException(
+        `user email:${email} don't participate workspace url: ${name}`,
+      );
+
+    const newChannelMember = new ChannelMember(channel.id, user.id);
+    await this.channelMemberRepository.createEntity(newChannelMember);
   }
 
   createWorkspaceChannelChats(
