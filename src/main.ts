@@ -22,7 +22,11 @@ import helmet from 'helmet';
 
   app.use(helmet());
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
   // app.useGlobalInterceptors(new ApiResponseInterceptor());
   app.useGlobalFilters(new TypeORMExceptionFilter());
   app.use(cookieParser());

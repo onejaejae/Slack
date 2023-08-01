@@ -21,7 +21,11 @@ export interface IChannelService {
     page: number,
   ): Promise<ChannelChat[]>;
 
-  getChannelUnreadsCount(url: string, name: string, after: number): any;
+  getChannelUnreadsCount(
+    url: string,
+    name: string,
+    after: number,
+  ): Promise<number>;
 
   createWorkspaceChannels(
     url: string,

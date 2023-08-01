@@ -24,6 +24,7 @@ import {
 } from './interface/channel-chat-repository.interface';
 import { ChannelChat } from './schema/channel.chat.schema';
 import { EventsGateway } from '../event/event.gateway';
+import { Transactional } from 'src/common/decorators/transactional.decorator';
 
 @Injectable()
 export class ChannelService implements IChannelService {
@@ -67,6 +68,12 @@ export class ChannelService implements IChannelService {
     );
   }
 
+  async getChannelUnreadsCount(url: string, name: string, after: number) {
+    const channel = await this.channelRepository.getWorkspaceChannel(url, name);
+    return this.channelChatRepository.getUnreadChatCount(channel.id, after);
+  }
+
+  @Transactional()
   async createWorkspaceChannels(url: string, name: string, userId: number) {
     const workspace = await this.workspaceRepository.findOneOrThrow({ url });
 
@@ -77,6 +84,7 @@ export class ChannelService implements IChannelService {
     await this.channelMemberRepository.createEntity(newChannelMember);
   }
 
+  @Transactional()
   async createWorkspaceChannelMembers(
     url: string,
     name: string,
@@ -98,6 +106,7 @@ export class ChannelService implements IChannelService {
     await this.channelMemberRepository.createEntity(newChannelMember);
   }
 
+  @Transactional()
   async createWorkspaceChannelChats(
     url: string,
     name: string,
@@ -121,15 +130,14 @@ export class ChannelService implements IChannelService {
       .to(`/ws-${url}-${channelChatJoinWithUserAndChannel.channelId}`)
       .emit('message', channelChatJoinWithUserAndChannel);
   }
+
+  @Transactional()
   createWorkspaceChannelImages(
     url: string,
     name: string,
     files: Express.Multer.File[],
     userId: number,
   ) {
-    throw new Error('Method not implemented.');
-  }
-  getChannelUnreadsCount(url: string, name: string, after: number) {
     throw new Error('Method not implemented.');
   }
 }

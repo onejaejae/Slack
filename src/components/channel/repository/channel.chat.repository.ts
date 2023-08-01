@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { ChannelMember } from 'src/components/channel/schema/channel.member.schema';
 import { SlackBaseRepository } from 'src/database/base.repository';
 import { TransactionManager } from 'src/database/transaction.manager';
-import { EntityTarget } from 'typeorm';
-import { IChannelMemberRepository } from '../interface/channel-member-repository.interface';
+import { EntityTarget, MoreThan } from 'typeorm';
 import { ChannelChat } from '../schema/channel.chat.schema';
 import { IChannelChatRepository } from '../interface/channel-chat-repository.interface';
 
@@ -44,6 +42,12 @@ export class ChannelChatRepository
     return this.getRepository().findOne({
       where: { id: channelId },
       relations: ['Channel', 'Member'],
+    });
+  }
+
+  async getUnreadChatCount(channelId: number, after: number): Promise<number> {
+    return this.getRepository().count({
+      where: { channelId, createdAt: MoreThan(new Date(after)) },
     });
   }
 }

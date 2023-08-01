@@ -4,6 +4,7 @@ import {
   Get,
   Inject,
   Param,
+  ParseIntPipe,
   Post,
   Query,
   UseGuards,
@@ -12,7 +13,6 @@ import { CreateChannelDto } from './dto/create-channel.dto';
 import { GetWorkspaceChannelChatsQueryDto } from './dto/getWorkspaceChannelChats.query.dto';
 import { CreateWorkspaceMembersDto } from './dto/create-workspace-members.dto';
 import { CreateWorkspaceChannelChatsDto } from './dto/create-workspace-channel.chats.dto';
-import { GetUnreadChannelsQueryDto } from './dto/getUnreadChannels.query.dto';
 import {
   ChannelServiceKey,
   IChannelService,
@@ -75,8 +75,10 @@ export class ChannelController {
   async getUnreads(
     @Param('url') url: string,
     @Param('name') name: string,
-    @Query() getUnreadChannelsQueryDto: GetUnreadChannelsQueryDto,
-  ) {}
+    @Query('after', ParseIntPipe) after: number,
+  ) {
+    return this.channelService.getChannelUnreadsCount(url, name, after);
+  }
 
   // '워크스페이스 채널 만들기'
   @Post(':url/channels')
