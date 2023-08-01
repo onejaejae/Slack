@@ -39,4 +39,11 @@ export class ChannelChatRepository
       .skip(perPage * (page - 1))
       .getMany();
   }
+
+  async joinWithUserAndChannel(channelId: number): Promise<ChannelChat> {
+    return this.getRepository().findOne({
+      where: { id: channelId },
+      relations: ['Channel', 'Member'],
+    });
+  }
 }

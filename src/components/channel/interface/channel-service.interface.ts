@@ -1,6 +1,7 @@
 import { User } from 'src/components/user/schema/user.schema';
 import { CreateChannelDto } from '../dto/create-channel.dto';
 import { Channel } from '../schema/channel.schema';
+import { ChannelChat } from '../schema/channel.chat.schema';
 
 export const ChannelServiceKey = 'ChannelServiceKey';
 
@@ -18,7 +19,9 @@ export interface IChannelService {
     name: string,
     perPage: number,
     page: number,
-  ): any;
+  ): Promise<ChannelChat[]>;
+
+  getChannelUnreadsCount(url: string, name: string, after: number): any;
 
   createWorkspaceChannels(
     url: string,
@@ -37,7 +40,7 @@ export interface IChannelService {
     name: string,
     content: string,
     userId: number,
-  ): any;
+  ): Promise<void>;
 
   createWorkspaceChannelImages(
     url: string,
@@ -45,6 +48,4 @@ export interface IChannelService {
     files: Express.Multer.File[],
     userId: number,
   ): any;
-
-  getChannelUnreadsCount(url: string, name: string, after: number): any;
 }

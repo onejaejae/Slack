@@ -10,6 +10,7 @@ import { WorkspaceModule } from '../workspace/workspace.module';
 import { UserModule } from '../user/user.module';
 import { ChannelChatRepositoryKey } from './interface/channel-chat-repository.interface';
 import { ChannelChatRepository } from './repository/channel.chat.repository';
+import { EventModule } from '../event/event.module';
 
 const channelService: ClassProvider = {
   provide: ChannelServiceKey,
@@ -32,7 +33,7 @@ export const channelChatRepository: ClassProvider = {
 };
 
 @Module({
-  imports: [forwardRef(() => WorkspaceModule), UserModule],
+  imports: [forwardRef(() => WorkspaceModule), UserModule, EventModule],
   controllers: [ChannelController],
   providers: [
     channelService,

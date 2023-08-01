@@ -18,6 +18,6 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get()
   async getProfile(@Credentials() credentials: VerifiedUser) {
-    return credentials.user || false;
+    return this.userService.getProfile(credentials.user.email);
   }
 }

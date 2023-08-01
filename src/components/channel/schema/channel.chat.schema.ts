@@ -24,6 +24,13 @@ export class ChannelChat extends BaseSchema implements IChannelChat {
   @Column('int', { nullable: true })
   channelId: number | null;
 
+  constructor(content: string, userId: number, channelId: number) {
+    super();
+    this.content = content;
+    this.userId = userId;
+    this.channelId = channelId;
+  }
+
   @ManyToOne(() => Channel, (channel) => channel.ChannelChats, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',

@@ -112,7 +112,15 @@ export class ChannelController {
     @Param('url') url,
     @Param('name') name,
     @Body() createWorkspaceChannelChatsDto: CreateWorkspaceChannelChatsDto,
-  ) {}
+    @Credentials() credential: VerifiedUser,
+  ) {
+    return this.channelService.createWorkspaceChannelChats(
+      url,
+      name,
+      createWorkspaceChannelChatsDto.content,
+      credential.user.id,
+    );
+  }
 
   // '워크스페이스 특정 채널 이미지 업로드하기'
   @Post(':url/channels/:name/images')

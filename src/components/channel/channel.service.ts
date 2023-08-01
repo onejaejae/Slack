@@ -22,6 +22,8 @@ import {
   ChannelChatRepositoryKey,
   IChannelChatRepository,
 } from './interface/channel-chat-repository.interface';
+import { ChannelChat } from './schema/channel.chat.schema';
+import { EventsGateway } from '../event/event.gateway';
 
 @Injectable()
 export class ChannelService implements IChannelService {
@@ -36,6 +38,7 @@ export class ChannelService implements IChannelService {
     private readonly workspaceRepository: IWorkspaceRepository,
     @Inject(UserRepositoryKey)
     private readonly userRepository: IUserRepository,
+    private readonly eventsGateway: EventsGateway,
   ) {}
 
   findById(id: number) {
@@ -95,13 +98,28 @@ export class ChannelService implements IChannelService {
     await this.channelMemberRepository.createEntity(newChannelMember);
   }
 
-  createWorkspaceChannelChats(
+  async createWorkspaceChannelChats(
     url: string,
     name: string,
     content: string,
     userId: number,
   ) {
-    throw new Error('Method not implemented.');
+    const channel = await this.channelRepository.getWorkspaceChannel(url, name);
+    await this.userRepository.findByIdOrThrow(userId);
+
+    const newChannelChat = new ChannelChat(content, userId, channel.id);
+    const createdChannelChat = await this.channelChatRepository.createEntity(
+      newChannelChat,
+    );
+
+    const channelChatJoinWithUserAndChannel =
+      await this.channelChatRepository.joinWithUserAndChannel(
+        createdChannelChat.id,
+      );
+    this.eventsGateway.server
+      // .of(`/ws-${url}`)
+      .to(`/ws-${url}-${channelChatJoinWithUserAndChannel.channelId}`)
+      .emit('message', channelChatJoinWithUserAndChannel);
   }
   createWorkspaceChannelImages(
     url: string,

@@ -10,4 +10,6 @@ export interface IChannelChatRepository extends IBaseRepository<ChannelChat> {
     perPage: number,
     page: number,
   ): Promise<ChannelChat[]>;
+
+  joinWithUserAndChannel(channelId: number): Promise<ChannelChat>;
 }
