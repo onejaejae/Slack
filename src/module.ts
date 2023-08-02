@@ -11,6 +11,7 @@ import { DatabaseModule } from './database/database.module';
 import { ErrorInterceptor } from './common/interceptors/error.interceptor';
 import { WinstonModule } from 'nest-winston';
 import { WinstonConfigService } from './common/config-services/winston-config.service';
+import { ShutDownManager } from './common/utils/shutdown.manager';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { WinstonConfigService } from './common/config-services/winston-config.se
   ],
   controllers: [],
   providers: [
+    ShutDownManager,
     {
       provide: APP_INTERCEPTOR,
       useClass: ErrorInterceptor,

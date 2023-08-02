@@ -31,6 +31,8 @@ import helmet from 'helmet';
   app.useGlobalFilters(new TypeORMExceptionFilter());
   app.use(cookieParser());
   app.use(session(ServerConfig.SESSION));
+  //for graceful ShutDown
+  app.enableShutdownHooks();
 
   await app.listen(appConfig.PORT);
   Logger.log(`🐁 [SLACK-API][${appConfig.ENV}] Started at: ${Date.now()}`);
