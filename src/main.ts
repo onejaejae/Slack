@@ -1,8 +1,12 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { Modules } from './module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SlackConfigService } from './components/config/config.service';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Logger,
+  ValidationPipe,
+} from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { TypeORMExceptionFilter } from './common/filters/typeorm-exception.filter';
@@ -28,6 +32,7 @@ import helmet from 'helmet';
     }),
   );
   // app.useGlobalInterceptors(new ApiResponseInterceptor());
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalFilters(new TypeORMExceptionFilter());
   app.use(cookieParser());
   app.use(session(ServerConfig.SESSION));
