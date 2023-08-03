@@ -1,17 +1,13 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { Modules } from './module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SlackConfigService } from './components/config/config.service';
-import {
-  ClassSerializerInterceptor,
-  Logger,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import { TypeORMExceptionFilter } from './common/filters/typeorm-exception.filter';
-import { ApiResponseInterceptor } from './common/interceptors/apiResponse.interceptor';
 import helmet from 'helmet';
+import { setNestApp } from './setNest.app';
 
 (async function () {
   const app = await NestFactory.create<NestExpressApplication>(Modules);
@@ -26,18 +22,15 @@ import helmet from 'helmet';
 
   app.use(helmet());
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-    }),
-  );
+
   // app.useGlobalInterceptors(new ApiResponseInterceptor());
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
   app.useGlobalFilters(new TypeORMExceptionFilter());
   app.use(cookieParser());
   app.use(session(ServerConfig.SESSION));
   //for graceful ShutDown
   app.enableShutdownHooks();
+  setNestApp(app);
 
   await app.listen(appConfig.PORT);
   Logger.log(`🐁 [SLACK-API][${appConfig.ENV}] Started at: ${Date.now()}`);
