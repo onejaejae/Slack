@@ -4,7 +4,7 @@
 
 ## Workflow 및 구현 패턴
 
-### 1. Transactional decorator
+### 1.1 Transactional decorator with cls-hooked
 
 #### 구현 방식
 
@@ -129,6 +129,310 @@ export class TransactionManager {
 ```
 
 ref: https://www.youtube.com/watch?v=AHSHjCVUsu8
+
+<br>
+
+### 1.2 Transactional decorator with DiscoveryModule
+
+#### 구현 방식
+
+- [AsyncLocalStorage](https://docs.nestjs.com/recipes/async-local-storage)를 사용해 Transaction Manager 관리
+
+- Transaction decorator 구현
+
+  - `SetMetadata`로 key-value 값을 등록합니다.
+
+- [OnModuleInit](https://docs.nestjs.com/fundamentals/lifecycle-events#lifecycle-events)이 실행되는 시점에 인스턴스에 접근해야합니다.
+
+  - OnModuleInit은 호스트 모듈의 종속성이 해결되면 호출되는 NestJS의 Life cycle event 입니다.
+
+- `DiscoveryService`로 Singleton Container에 있는 instance에 접근할 수 있습니다.
+
+- `MetadataScanner`로 decorator의 instance에 대한 metadata를 가져올 수 있습니다.
+  - 즉, 앞에서 언급된 `SetMetadata`로 등록된 값들을 조회하는 것입니다.
+
+<br>
+
+#### 실행 흐름
+
+1. 호스트 모듈의 종속성이 해결되면 Database Module의 onModuleInit이 실행됩니다.
+
+2. onModuleInit 메소드가 실행되면서 transactionalWrap method를 통해 모든 singleton instance와 method를 가져옵니다.
+
+3. 가져온 method 중 transaction decortation를 사용하고 있다면, 해당 method를 transaction wrapping 합니다.
+
+<br>
+
+#### Transaction decorator example
+
+`SetMetadata`는 NestJS에서 제공하는 데코레이터 중 하나로, 메서드에 메타데이터를 설정할 때 사용됩니다.
+
+이 코드에서는 `TRANSACTIONAL_KEY`라는 Symbol과 true 값을 사용하여 트랜잭션 처리가 필요한 메서드임을 표시합니다.
+
+Transactional() 데코레이터를 클래스의 메서드 위에 적용하면 해당 메서드는 트랜잭션 처리가 필요한 상태로 설정됩니다.
+
+<br>
+
+```js
+export const TRANSACTIONAL_KEY = Symbol('TRANSACTIONAL');
+
+export function Transactional(): MethodDecorator {
+  return applyDecorators(SetMetadata(TRANSACTIONAL_KEY, true));
+}
+```
+
+<br>
+
+#### DiscoveryService로 Singleton Container에 있는 instance에 접근
+
+```js
+export class DatabaseModule implements OnModuleInit {
+  private readonly queryRunnerLocalStorage = new AsyncLocalStorage<{
+    queryRunner: QueryRunner;
+  }>(); // [1]
+
+  constructor(
+    private readonly discover: DiscoveryService,
+    private readonly metadataScanner: MetadataScanner,
+    private readonly reflector: Reflector,
+    private readonly dataSource: DataSource,
+  ) {}
+
+  onModuleInit() {
+    this.transactionalWrap();
+    this.repositoryWrap()
+  }
+
+  transactionalWrap() {
+    const instances = this.discover
+      .getProviders() // getProviders를 통해서 모든 singleton instance를 가져옵니다.
+      .filter((v) => v.isDependencyTreeStatic()) // [2]
+      .filter(({ metatype, instance }) => {
+        if (!instance || !metatype) return false;
+        else return true;
+      });
+
+     // ...
+
+    }
+  }
+
+  wrapMethod(originalMethod: any, instance: any) { }
+}
+
+// ...
+
+```
+
+<br>
+
+**[1]** : `private readonly queryRunnerLocalStorage = new AsyncLocalStorage<{
+    queryRunner: QueryRunner;
+  }>();`
+
+- AsyncLocalStorage를 사용하여 데이터베이스 트랜잭션을 안전하게 관리하고, 여러 비동기 작업 사이에서 연속성을 유지하며 효율적으로 데이터를 전달할 수 있게 됩니다.
+- DatabaseModule 클래스 내에서 AsyncLocalStorage 인스턴스를 생성하여 queryRunner라는 데이터를 연결합니다. queryRunner는 데이터베이스 트랜잭션을 관리하기 위해 사용됩니다.
+
+**[2]** : `. filter((v) => v.isDependencyTreeStatic()) `
+
+- request scope가 아닌 싱글톤 프로바이더만 반환합니다.
+
+<Br>
+
+**싱글톤 프로바이더(Singleton Provider):**
+
+싱글톤 프로바이더는 애플리케이션 전체에서 하나의 인스턴스만 존재하며, 해당 인스턴스가 요청되는 모든 곳에서 동일한 객체를 제공합니다. 이는 애플리케이션의 라이프사이클 내에서 한 번 생성된 후 재사용되는 프로바이더를 의미합니다. 따라서, 싱글톤 프로바이더는 메모리 상에 유지되며 여러 요청 또는 인스턴스에서 동일한 상태를 공유할 수 있습니다.
+
+**Request Scope 프로바이더:**
+
+Request Scope 프로바이더는 요청마다 각기 다른 인스턴스가 생성되고, 해당 요청의 라이프사이클에 따라 인스턴스가 관리됩니다. 즉, 매 요청마다 새로운 인스턴스가 생성되며 요청이 끝나면 인스턴스가 소멸됩니다. 이를 통해 각각의 요청마다 독립적인 상태를 유지할 수 있습니다.
+
+  <br>
+
+
+`transactionalWrap`코드를 이어서 봅시다.
+
+```js
+
+  transactionalWrap() {
+    const instances = this.discover
+      .getProviders() // getProviders를 통해서 모든 singleton instance를 가져옵니다.
+      .filter((v) => v.isDependencyTreeStatic()) // 프로바이더(provider)의 의존성 트리가 정적인지 여부를 판단
+      .filter(({ metatype, instance }) => {
+        if (!instance || !metatype) return false;
+        else return true;
+      });
+
+     for (const instance of instances) {
+      const names = this.metadataScanner.getAllMethodNames(
+        Object.getPrototypeOf(instance.instance),
+      ); // instance에 속한 모든 method name을 반환합니다.
+
+      for (const name of names) {
+        const originalMethod = instance.instance[name];
+
+        const isTransactional = this.reflector.get(
+          TRANSACTIONAL_KEY,
+          originalMethod,
+        ); // [1]
+
+        if (!isTransactional) {
+          continue;
+        }
+
+        instance.instance[name] = this.wrapMethod(
+          originalMethod,
+          instance.instance,
+        );
+      }
+    }
+
+    }
+  }
+
+```
+
+<br>
+
+**[1]** : `this.reflector.get(
+          TRANSACTIONAL_KEY,
+          originalMethod);`
+
+- transaction 처리가 필요한 메서드를 찾습니다.
+  - 앞서 정의해둔 `Transactional decorator`를 사용하고 있는 method라면, SetMetadata로 등록된 값을 위 코드를 통해서 찾을 수 있습니다.
+
+ <br>
+ 
+이제 wrapMethod에 대해 살펴봅시다.
+
+```js
+ wrapMethod(originalMethod: any, instance: any) {
+    const { dataSource, queryRunnerLocalStorage } = this;
+
+    return async function (...args: any[]) {
+      const store = queryRunnerLocalStorage.getStore(); // [1]
+
+      if (store !== undefined)
+        return await originalMethod.apply(instance, args); // [2]
+
+      const queryRunner = dataSource.createQueryRunner(); // [3]
+      await queryRunner.startTransaction(); // queryRunner를 사용하여 데이터베이스 트랜잭션을 시작.
+
+      const result = await queryRunnerLocalStorage.run( // [4]
+        { queryRunner },
+        async () => {
+          try {
+            const result = await originalMethod.apply(instance, args);
+            await queryRunner.commitTransaction(); // originalMethod가 정상적으로 완료되었을 때, 데이터베이스 트랜잭션을 커밋.
+
+            return result;
+          } catch (error) {
+            await queryRunner.rollbackTransaction(); // originalMethod 수행 중에 에러가 발생했을 때, 데이터베이스 트랜잭션을 롤백.
+            throw error;
+          } finally {
+            await queryRunner.release(); // 트랜잭션이 완료되면, 사용된 queryRunner를 해제하여 다른 요청이나 작업에서 사용할 수 있도록 합니다.
+          }
+        },
+      );
+
+      return result;
+    };
+  }
+```
+
+**[1]** : `const store = queryRunnerLocalStorage.getStore();`
+
+- AsyncLocalStorage의 getStore() 메서드를 통해 현재 비동기 작업의 컨텍스트에서 저장된 데이터를 가져옵니다.
+
+**[2]** : `  if (store !== undefined) ...`
+
+- 비동기 작업의 컨텍스트에 queryRunner 데이터가 이미 존재하는 경우입니다.
+  즉, 이미 데이터베이스 트랜잭션이 시작된 상태이므로 해당 데이터베이스 트랜잭션에 속한 originalMethod를 바로 실행합니다.
+
+**[3]** : `const queryRunner = dataSource.createQueryRunner();`
+
+- 비동기 작업의 컨텍스트에 queryRunner 데이터가 없는 경우, dataSource에서 새로운 queryRunner를 생성합니다.
+
+- queryRunner는 데이터베이스 연결을 나타내며, 트랜잭션의 관리를 담당합니다.
+
+**[4]** : `const result = await queryRunnerLocalStorage.run({ queryRunner }, async () => { ... })`
+
+- AsyncLocalStorage의 run() 메서드를 사용하여 새로운 데이터베이스 트랜잭션 컨텍스트를 만듭니다. run() 메서드는 래핑된 함수 내에서 데이터를 공유할 수 있도록 합니다.
+
+- originalMethod를 호출하면서, 해당 메서드가 리턴하는 Promise의 결과를 result에 저장합니다.
+
+<br>
+
+
+여기까지 `transaction decorator`를 사용하고 있는 method를 transaction wrapping하는 코드를 살펴보았습니다.
+
+마지막으로 repository에 접근해봅시다.
+
+<br>
+
+```js
+
+repositoryWrap() {
+  const { queryRunnerLocalStorage } = this;
+
+  this.discover
+    .getProviders()
+    .filter((v) => v.isDependencyTreeStatic())
+    .filter(({ metatype, instance }) => {
+      if (!instance || !metatype) return false;
+      else return true;
+    })
+    .filter(({ instance }) => instance instanceof BaseRepository) // [1]
+    .forEach(({ instance }) => {
+	// Object.defineProperty를 사용하여 'manager' 속성을 동적으로 추가합니다.
+      Object.defineProperty(instance, 'manager', { // [2]
+        configurable: false,
+        get() {
+// queryRunnerLocalStorage에서 현재 스토어를 가져와서 queryRunner의 manager를 반환합니다.
+          const store = queryRunnerLocalStorage.getStore();
+          return store?.queryRunner.manager; // store가 존재하지 않으면 undefined를 반환합니다.
+        },
+      });
+    });
+}
+```
+
+**[1]** : `filter(({ instance }) => instance instanceof BaseRepository)`
+
+- BaseRepository를 상속하는 클래스들만 필터링합니다
+  - 현재 프로젝트에서는 AbstractRepositry가 BaseRepository를 상속받고 있는 구조입니다.
+
+**[2]** : `forEach(({ instance }) => { ... }`
+
+- Object.defineProperty() 메서드를 사용하여 manager 속성을 정의합니다.
+
+  - 인스턴스에 get manager() 속성을 추가하여 queryRunnerLocalStorage를 통해 queryRunner.manager 가져 올 수 있도록 합니다.
+
+  - configurable: false 설정으로 해당 속성을 다시 정의하거나 삭제할 수 없게 됩니다. 이를 통해 manager 속성을 덮어쓰거나 재정의하는 것을 방지하며, 안정성과 일관성을 제공합니다.
+
+<br>
+
+
+### 정리
+
+**transactionalWrap()**
+
+- getProviders를 통해서 모든 singleton instance(@Injectable()로 주석 처리된 클래스)를 가져옵니다.
+
+- @Transactional() 데코레이터를 사용하는 메서드를 찾아 해당 메서드를 트랜잭션을 시작하는 TypeORM의 queryRunner를 사용하여 wrapping 합니다.
+
+**wrapMethod()**
+
+- origianl method, instance를 매개변수로 받아 wrapping된 버전의 메서드를 반환합니다.
+
+- wrapping된 메서드는 진행 중인 트랜잭션이 없을 경우 (queryRunnerLocalStorage를 사용하여 트랜잭션 상태를 저장) 트랜잭션을 시작합니다.
+- weapping된 메서드는 원래 메서드를 호출하고 메서드의 성공 여부에 따라 트랜잭션을 커밋하거나 롤백합니다.
+
+**repositoryWrap()**
+
+- BaseRepository 클래스를 상속하는 instance를 모두 찾아, 해당 instance에 get manager() 속성을 추가하여 queryRunnerLocalStorage에서 데이터베이스 manager를 가져올 수 있게 합니다.
+
+<br>
 
 ### 2. Error Interceptor
 
