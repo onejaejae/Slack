@@ -12,6 +12,7 @@ import { ErrorInterceptor } from './common/interceptors/error.interceptor';
 import { WinstonModule } from 'nest-winston';
 import { WinstonConfigService } from './common/config-services/winston-config.service';
 import { ShutDownManager } from './common/utils/shutdown.manager';
+import { DatabaseModule2 } from './database/database2.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { ShutDownManager } from './common/utils/shutdown.manager';
     WorkspaceModule,
     ChannelModule,
     DmModule,
-    DatabaseModule.forRoot(),
+    // DatabaseModule.forRoot(),
+    DatabaseModule2.forRoot(),
     WinstonModule.forRootAsync({ useClass: WinstonConfigService }),
   ],
   controllers: [],

@@ -11,12 +11,18 @@ import { TransactionManager } from './transaction.manager';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { IBaseRepository } from './interface/base-repository.interface';
+import { BaseRepository } from 'src/common/decorators/transactional.decorator2';
 
 @Injectable()
-export abstract class SlackBaseRepository<T> implements IBaseRepository<T> {
+export abstract class SlackBaseRepository<T>
+  extends BaseRepository
+  implements IBaseRepository<T>
+{
   protected abstract readonly txManager: TransactionManager;
 
-  constructor(private readonly classType: ClassConstructor<T>) {}
+  constructor(private readonly classType: ClassConstructor<T>) {
+    super();
+  }
 
   /**
    * getName
@@ -52,6 +58,11 @@ export abstract class SlackBaseRepository<T> implements IBaseRepository<T> {
     return plainToInstance(this.classType, res);
   }
 
+  async createEntity2(model: T): Promise<T> {
+    const res = await this.getRepository2().save(model);
+    return plainToInstance(this.classType, res);
+  }
+
   async upsert(entity: QueryDeepPartialEntity<T>, options: string[]) {
     return this.getRepository().upsert(entity, options);
   }
@@ -65,6 +76,10 @@ export abstract class SlackBaseRepository<T> implements IBaseRepository<T> {
    */
   protected getRepository(): Repository<T> {
     return this.txManager.getEntityManager().getRepository(this.getName());
+  }
+
+  protected getRepository2(): Repository<T> {
+    return this.manager.getRepository(this.getName());
   }
 
   protected getQueryBuilder(): SelectQueryBuilder<T> {

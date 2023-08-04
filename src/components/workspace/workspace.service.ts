@@ -29,6 +29,11 @@ import {
   IWorkspaceMemberRepository,
   WorkspaceMemberRepositoryKey,
 } from './interface/workspace-member-repository.interface';
+import { Transactional2 } from 'src/common/decorators/transactional.decorator2';
+import {
+  IWorkspaceRepository2,
+  WorkspaceRepositoryKey2,
+} from './interface/workspace-repository2.interface';
 
 @Injectable()
 export class WorkspaceService implements IWorkspaceService {
@@ -37,6 +42,8 @@ export class WorkspaceService implements IWorkspaceService {
     private readonly userRepository: IUserRepository,
     @Inject(WorkspaceRepositoryKey)
     private readonly workspaceRepository: IWorkspaceRepository,
+    @Inject(WorkspaceRepositoryKey2)
+    private readonly workspaceRepository2: IWorkspaceRepository2,
     @Inject(WorkspaceMemberRepositoryKey)
     private readonly workspaceMemberRepository: IWorkspaceMemberRepository,
     @Inject(ChannelRepositoryKey)
@@ -57,7 +64,7 @@ export class WorkspaceService implements IWorkspaceService {
     return this.userRepository.getWorkspaceMembers(url);
   }
 
-  @Transactional()
+  @Transactional2()
   async createWorkspace(
     createWorkspaceDto: CreateWorkspaceDto,
     userId: number,
@@ -65,26 +72,28 @@ export class WorkspaceService implements IWorkspaceService {
     const { name, url } = createWorkspaceDto;
 
     const newWorkspace = new Workspace(name, url, userId);
-    const workspace = await this.workspaceRepository.createEntity(newWorkspace);
+    const workspace = await this.workspaceRepository2.createEntity2(
+      newWorkspace,
+    );
 
     const newWorkspaceMember = new WorkspaceMember(workspace.id, userId);
-    await this.workspaceMemberRepository.createEntity(newWorkspaceMember);
+    await this.workspaceMemberRepository.createEntity2(newWorkspaceMember);
 
     const newChannel = new Channel('일반', workspace.id);
-    const channel = await this.channelRepository.createEntity(newChannel);
+    const channel = await this.channelRepository.createEntity2(newChannel);
 
     const newChannelMember = new ChannelMember(channel.id, userId);
-    await this.channelMemberRepository.createEntity(newChannelMember);
+    await this.channelMemberRepository.createEntity2(newChannelMember);
   }
 
-  @Transactional()
+  @Transactional2()
   async createWorkspaceMembers(
     url: string,
     createWorkspaceMemberDto: CreateWorkspaceMemberDto,
   ) {
     const { email } = createWorkspaceMemberDto;
 
-    const workspace = await this.workspaceRepository.joinChannel(url);
+    const workspace = await this.workspaceRepository2.joinChannel(url);
     const user = await this.userRepository.findOneOrThrow({ email });
 
     const newWorkspaceMember = new WorkspaceMember(workspace.id, user.id);

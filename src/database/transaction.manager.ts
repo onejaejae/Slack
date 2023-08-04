@@ -18,7 +18,6 @@ export class TransactionManager {
   getEntityManager(): EntityManager {
     const nameSpace = getNamespace(SLACK_NAMESPACE);
     if (!nameSpace || !nameSpace.active) {
-      console.log('error excecute');
       throw new InternalServerErrorException(
         `${SLACK_NAMESPACE} is not active`,
       );
