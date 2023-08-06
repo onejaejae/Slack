@@ -1,5 +1,5 @@
 import { Controller, Get, Inject, UseGuards } from '@nestjs/common';
-import { UserService } from './user.service';
+import { UserService } from './service/user.service';
 import { Credentials } from 'src/common/decorators/credential.decorator';
 import { VerifiedUser } from 'src/types/user/common';
 import { AuthGuard } from 'src/common/guards/auth.guard';

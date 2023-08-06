@@ -57,6 +57,7 @@
     "nodemon": "^3.0.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "testcontainers": "9.1.1",
     "typeorm": "^0.3.17",
     "typeorm-extension": "^2.8.1",
     "winston": "^3.10.0",
@@ -101,6 +102,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "src/(.*)": "<rootDir>/$1"
+    }
   }
 }

@@ -9,7 +9,7 @@ import {
 
 import { Workspace } from '../../workspace/schema/workspace.schema';
 import { User } from '../../user/schema/user.schema';
-import { IMention, MentionType } from 'src/types/mention/common';
+import { IMention, MentionType } from '../../../types/mention/common';
 
 @Entity({ schema: 'sleact', name: 'mentions' })
 export class Mention extends BaseSchema implements IMention {

@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   IUserRepository,
   UserRepositoryKey,
-} from './interface/user-repository.interface';
-import { IUserService } from './interface/user-service.interface';
+} from '../interface/user-repository.interface';
+import { IUserService } from '../interface/user-service.interface';
 
 @Injectable()
 export class UserService implements IUserService {
