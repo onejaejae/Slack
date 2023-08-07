@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { EntityTarget } from 'typeorm';
 import { User, UserJoinWithWorkspace } from '../schema/user.schema';
 import { SlackBaseRepository } from 'src/database/base.repository';
@@ -51,10 +51,13 @@ export class UserRepository
 
   @TransformPlainToInstance(UserJoinWithWorkspace)
   async joinWithWorkspace(email: string): Promise<UserJoinWithWorkspace> {
-    return this.getQueryBuilder()
-      .innerJoinAndSelect('user.Workspaces', 'workspace')
+    const res = (await this.getQueryBuilder()
+      .leftJoinAndSelect('user.Workspaces', 'workspace')
       .where('user.email=:email', { email })
-      .getOne() as any;
+      .getOne()) as any;
+
+    if (!res) throw new BadRequestException(`email: ${email} don't exist`);
+    return res;
   }
 
   async getWorkspaceChannelMembers(url: string, name: string): Promise<User[]> {
