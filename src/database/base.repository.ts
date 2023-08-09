@@ -79,7 +79,7 @@ export abstract class SlackBaseRepository<T>
   }
 
   protected getRepository2(): Repository<T> {
-    return this.manager.getRepository(this.getName());
+    return this.manager.getRepository(this.getName);
   }
 
   protected getQueryBuilder(): SelectQueryBuilder<T> {

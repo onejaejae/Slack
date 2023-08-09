@@ -1,39 +1,39 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { WorkspaceRepository } from './repository/workspace.repository';
+import { WorkspaceRepository } from '../repository/workspace.repository';
 import { Transactional } from 'src/common/decorators/transactional.decorator';
-import { CreateWorkspaceDto } from './dto/create-workspace.dto';
-import { Workspace } from './schema/workspace.schema';
-import { WorkspaceMember } from './schema/workspace.member.schema';
-import { ChannelMember } from '../channel/schema/channel.member.schema';
-import { Channel } from '../channel/schema/channel.schema';
-import { WorkspaceMemberRepository } from './repository/workspace.member.repository';
-import { CreateWorkspaceMemberDto } from './dto/create-workspace.member.dto';
-import { IWorkspaceService } from './interface/workspace-service.interface';
+import { CreateWorkspaceDto } from '../dto/create-workspace.dto';
+import { Workspace } from '../schema/workspace.schema';
+import { WorkspaceMember } from '../schema/workspace.member.schema';
+import { ChannelMember } from '../../channel/schema/channel.member.schema';
+import { Channel } from '../../channel/schema/channel.schema';
+import { WorkspaceMemberRepository } from '../repository/workspace.member.repository';
+import { CreateWorkspaceMemberDto } from '../dto/create-workspace.member.dto';
+import { IWorkspaceService } from '../interface/workspace-service.interface';
 import {
   ChannelRepositoryKey,
   IChannelRepository,
-} from '../channel/interface/channel-repository.interface';
+} from '../../channel/interface/channel-repository.interface';
 import {
   ChannelMemberRepositoryKey,
   IChannelMemberRepository,
-} from '../channel/interface/channel-member-repository.interface';
+} from '../../channel/interface/channel-member-repository.interface';
 import {
   IUserRepository,
   UserRepositoryKey,
-} from '../user/interface/user-repository.interface';
+} from '../../user/interface/user-repository.interface';
 import {
   IWorkspaceRepository,
   WorkspaceRepositoryKey,
-} from './interface/workspace-repository.interface';
+} from '../interface/workspace-repository.interface';
 import {
   IWorkspaceMemberRepository,
   WorkspaceMemberRepositoryKey,
-} from './interface/workspace-member-repository.interface';
+} from '../interface/workspace-member-repository.interface';
 import { Transactional2 } from 'src/common/decorators/transactional.decorator2';
 import {
   IWorkspaceRepository2,
   WorkspaceRepositoryKey2,
-} from './interface/workspace-repository2.interface';
+} from '../interface/workspace-repository2.interface';
 
 @Injectable()
 export class WorkspaceService implements IWorkspaceService {
@@ -72,7 +72,8 @@ export class WorkspaceService implements IWorkspaceService {
     const { name, url } = createWorkspaceDto;
 
     const newWorkspace = new Workspace(name, url, userId);
-    const workspace = await this.workspaceRepository2.createEntity2(
+    console.log('newWorkspace', newWorkspace);
+    const workspace = await this.workspaceRepository.createEntity2(
       newWorkspace,
     );
 
