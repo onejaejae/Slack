@@ -45,7 +45,7 @@ export abstract class SlackBaseRepository<T>
 
   async findByIdOrThrow(id: number): Promise<T> {
     const findOption: FindOneOptions = { where: { id } };
-    const res = this.getRepository().findOne(findOption);
+    const res = await this.getRepository().findOne(findOption);
 
     if (!res) {
       throw new BadRequestException(`don't exist ${id}`);
@@ -65,6 +65,10 @@ export abstract class SlackBaseRepository<T>
 
   async upsert(entity: QueryDeepPartialEntity<T>, options: string[]) {
     return this.getRepository().upsert(entity, options);
+  }
+
+  async deleteById(id: number) {
+    return this.getRepository().softDelete(id);
   }
 
   /**
